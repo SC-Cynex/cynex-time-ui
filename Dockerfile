@@ -11,13 +11,15 @@ COPY . .
 
 RUN npm run build
 
-# Imprime uma mensagem no console
-RUN echo "Conteúdo do diretório atual:"
+RUN echo "Conteúdo do diretório atual do build:"
 RUN ls -al
 
 # Etapa final
 FROM nginx:alpine
 
-COPY --from=build /usr/src/cynex-time-ui /usr/share/nginx/html
+RUN echo "Conteúdo do diretório atual da etapa final:"
+RUN ls -al
+
+COPY --from=build /usr/src/cynex-time-ui/dist /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
