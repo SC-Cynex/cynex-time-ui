@@ -1,25 +1,26 @@
 import React from "react";
 import { MdEmail } from "react-icons/md";
-import { FaKey } from "react-icons/fa";
 import { Form, Button, Input } from "antd";
-import styles from "./Login.module.css";
+import styles from "./RedefinePassword.module.css";
 import stylesAuth from "../Auth.module.css";
 import actions from "./actions.js";
-
-export default function Login() {
+import { RiMailSendLine } from "react-icons/ri";
+export default function RedefinePassword() {
   return (
     <div>
       <section className={stylesAuth.sectionLeft}>
-        <div className={stylesAuth.divLeftTitle}>
-          <h1 className={stylesAuth.title}>CynexTime</h1>
-          <h4 className={stylesAuth.subTitle}>Time is Work</h4>
+        <div className={styles.divTitleForms}>
+          <RiMailSendLine size={120} color="3F8FDA" style={{marginBottom: "10px"}}/>
+          <h1 className={styles.titleForms}>Redefinir Senha</h1>
+          <p className={styles.subTitleForms}>
+            Informe seu e-mail para qual deseja redefinir a senha.
+          </p>
         </div>
-        <h1 className={styles.titleForms}>Login</h1>
         <Form
           action=""
           method="post"
           style={{ width: "300px" }}
-          onFinish={actions.signIn}
+          onFinish={actions.redefinePassword}
           className={styles.form}
         >
           <Form.Item
@@ -40,31 +41,9 @@ export default function Login() {
               size={"large"}
             />
           </Form.Item>
-          <Form.Item
-            name={"password"}
-            rules={[
-              {
-                required: true,
-                message: "",
-                min: 6,
-              },
-            ]}
-            hasFeedback
-          >
-            <Input.Password
-              placeholder={"Senha"}
-              prefix={<FaKey className={stylesAuth.iconInput} />}
-              size={"large"}
-            />
-          </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" block size="large">
-              Entrar
-            </Button>
+            <Button type="primary" htmlType="submit" block size="large" >Entrar</Button>
           </Form.Item>
-          <a href="/redefine-password" style={{ textAlign: "center" }}>
-            Esqueceu sua senha?
-          </a>
         </Form>
       </section>
       <section className={stylesAuth.sectionRight}>

@@ -1,6 +1,6 @@
 import Login from '../pages/Auth/Login/Login';
 import Register from '../pages/Auth/Register/Register';
-import RedifinePassword from '../pages/Auth/RedifinePassword/RedifinePassword';
+import RedefinePassword from '../pages/Auth/RedefinePassword/RedefinePassword';
 import Historic from '../pages/Historic/Historic';
 import MemberRegister from '../pages/MemberRegister/MemberRegister';
 import PointRegister from '../pages/PointRegister/PointRegister';
@@ -21,8 +21,8 @@ const routes = [
         component: Historic,
     },
     {
-        path: '/redifine-password',
-        component: RedifinePassword,
+        path: '/redefine-password',
+        component: RedefinePassword,
     },
     {
         path: '/member-register',

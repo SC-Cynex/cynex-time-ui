@@ -1,0 +1,73 @@
+/*CSS PADRÃO DAS TELAS DE AUTENTICAÇÃO*/
+
+.sectionLeft {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
+    float: left;
+    background-color: var(--primaryColor);
+    min-width: 50vw;
+    min-height: 100vh;
+}
+
+.sectionRight {
+    display: block;
+    display: flex;
+    justify-content: center;
+    float: right;
+    background-color: var(--background);
+    width: 50vw;
+    height: 100vh;
+}
+
+.iconInput {
+    color: var(--primaryColor);
+    margin-right: 5px;
+}
+
+.divTitle {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title {
+    font-family: "Russo One", sans-serif;
+    font-size: 80px;
+    letter-spacing: 5px;
+    color: var(--primaryColor);
+}
+
+.subTitle {
+    font-size: 30px;
+    letter-spacing: 15px;
+    font-family: "Noto Sans", sans-serif;
+    color: var(--primaryColor);
+}
+
+.divLeftTitle {
+    display: none;
+}
+
+
+@media (max-width: 1000px) {
+    .sectionRight {
+        display: none;
+    }
+
+    .sectionLeft {
+        width: 100vw;
+    }
+
+    .divLeftTitle {
+        display: block;
+        text-align: center;
+    }
+
+    .title,
+    .subTitle {
+        color: white;
+    }
+}
