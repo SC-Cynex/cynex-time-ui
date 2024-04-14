@@ -11,14 +11,8 @@ COPY . .
 
 RUN npm run build
 
-RUN echo "Conteúdo do diretório atual do build:"
-RUN ls -al
-
 # Etapa final
 FROM nginx:alpine
-
-RUN echo "Conteúdo do diretório atual da etapa final:"
-RUN ls -al
 
 COPY --from=build /usr/src/cynex-time-ui/dist /usr/share/nginx/html
 
