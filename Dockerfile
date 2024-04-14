@@ -1,21 +1,23 @@
-FROM node:14-alpine AS build
+# Etapa de compilação
+FROM node:alpine AS build
 
-WORKDIR /app
+WORKDIR /usr/src/cynex-time-ui
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --silent
 
 COPY . .
 
 RUN npm run build
 
-FROM node:14-alpine
+# Imprime uma mensagem no console
+RUN echo "Conteúdo do diretório atual:"
+RUN ls -al
 
-WORKDIR /app
+# Etapa final
+FROM nginx:alpine
 
-COPY --from=build /app/dist ./dist
+COPY --from=build /usr/src/cynex-time-ui /usr/share/nginx/html
 
-RUN npm install -g serve
-
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["nginx", "-g", "daemon off;"]
