@@ -1,0 +1,15 @@
+.body {
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hours{
+    font-size: 80px;
+}
+
+.date {
+    font-size: 30px;
+    
+}

@@ -13,10 +13,6 @@ const routes = [
         component: Login,
     },
     {
-        path: '/register',
-        component: Register,
-    },
-    {
         path: '/historic',
         component: Historic,
     },
