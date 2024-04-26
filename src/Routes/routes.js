@@ -1,5 +1,4 @@
 import Login from '../pages/Auth/Login/Login';
-import Register from '../pages/Auth/Register/Register';
 import RedefinePassword from '../pages/Auth/RedefinePassword/RedefinePassword';
 import Historic from '../pages/Historic/Historic';
 import MemberRegister from '../pages/MemberRegister/MemberRegister';
@@ -11,10 +10,6 @@ const routes = [
     {
         path: '/',
         component: Login,
-    },
-    {
-        path: '/register',
-        component: Register,
     },
     {
         path: '/historic',
