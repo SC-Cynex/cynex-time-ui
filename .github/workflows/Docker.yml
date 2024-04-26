@@ -39,7 +39,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: cynexsc/ui-build:${{ github.ref_name }}
+        tags: cynexsc/ui-build
 
     - name: Message
       run: |
