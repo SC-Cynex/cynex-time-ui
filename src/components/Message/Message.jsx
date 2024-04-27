@@ -1,21 +1,23 @@
-import React from 'react';
-import { Alert, Space } from 'antd';
-import { CloseSquareFilled } from '@ant-design/icons';
+import React from "react";
+import { Alert, Space } from "antd";
 
-const Message = ({title, message, type}) => (
+const Message = ({ title, message, type, enable }) => (
   <Space
     direction="vertical"
     style={{
-      position: 'fixed',
-      bottom: '10px'
+      width: '100%',
     }}
   >
     <Alert
+      style={{ fontSize: "16px" }}
       message={title}
       description={message}
       type={type}
       showIcon
       closable
+      onClose={() => {
+        enable(false);
+      }}
     />
   </Space>
 );
