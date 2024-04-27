@@ -23,9 +23,8 @@
 }
 
 .tablePoint {
-    max-width: 100%;
     margin: 15px 150px;
-    height: 20%;
+    height: 180px;
     border-radius: 15px;
     background-color: #EFEFEF;
 }
@@ -47,4 +46,9 @@
 .listPoint p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 16px;
+}
+
+.message {
+    max-width: 100%;
+    margin: 20px 150px;
 }
