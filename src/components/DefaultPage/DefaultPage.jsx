@@ -10,7 +10,7 @@ export default function DefaultPage({ children }) {
       <Layout>
         <HeaderPage />
         <Layout>
-          <div>{children}</div>
+          {children}
         </Layout>
       </Layout>
     </Layout>

@@ -7,12 +7,11 @@
     flex-direction: column;
     float: left;
     background-color: var(--primaryColor);
-    min-width: 50vw;
-    min-height: 100vh;
+    width: 50vw;
+    height: 100vh;
 }
 
 .sectionRight {
-    display: block;
     display: flex;
     justify-content: center;
     float: right;
@@ -66,8 +65,13 @@
         text-align: center;
     }
 
-    .title,
+    .title {
+        color: white;
+        font-size: 70px;
+    }
+
     .subTitle {
         color: white;
+        font-size: 20px;
     }
 }
