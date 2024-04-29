@@ -15,6 +15,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         Form:{
           verticalLabelPadding: 0,
           labelRequiredMarkColor: "transparent"
+        },
+        Collapse: {
+          headerBg: "#1F497D",
+          contentBg: "#1F497D",
+          colorText: "white",
+          colorTextHeading: "white",
+          fontSize: "20px"
         }
       },
     }}

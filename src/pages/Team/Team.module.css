@@ -1,0 +1,74 @@
+.team{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.collapse {
+   width: 100%;
+   margin-top: 40px;
+   padding: 0 50px 0 50px;
+}
+
+.infoMember {
+    padding: 20px;
+}
+
+.titleInfo {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.hours {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.date {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.moreInfo {
+    margin-top: 20px;
+    align-items: center;
+}
+.titleMore {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.aboutMember {
+    font-size: 14px;
+}
+
+.spacePointer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.rowPointer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.pointers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avartarUser {
+    display: flex;
+    align-items: center;
+}
+
+.userCollapse {
+    width: 100%;
+    margin-bottom: 25px;
+}
