@@ -3,7 +3,6 @@ import styles from './SiderPage.module.css';
 import { Layout, Menu, Button, Divider } from "antd";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { PiSignOut } from "react-icons/pi";
 import { FiMenu } from "react-icons/fi";
 import { GiStopwatch } from "react-icons/gi";
 import { LuHistory } from "react-icons/lu";
@@ -26,8 +25,7 @@ const items = [
   getItem("Histórico", "/historic", <LuHistory size={20}/>),
   getItem("Registrar Membro", "/member-register", <IoDocumentTextOutline size={20}/>),
   getItem("Equipe", "/team", <FaUserGroup size={20}/>),
-  getItem("Configurações", "/settings", <IoSettingsOutline size={20}/>),
-  getItem("Sair", "signout", <PiSignOut size={20}/>),
+  getItem("Configurações", "/settings", <IoSettingsOutline size={20}/>)
 ];
 
 const SiderPage = () => {
@@ -52,12 +50,7 @@ const SiderPage = () => {
       <Divider className={styles.divider}/>
       <Menu
         onClick={({ key }) => {
-          if (key === "signout") {
-            alert("Saindo");
-            window.location.reload();
-          } else {
             navigate(key);
-          }
         }}
         defaultSelectedKeys={[window.location.pathname]}
         mode="inline"
