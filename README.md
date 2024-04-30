@@ -6,7 +6,7 @@ Bem-vindo ao CynexTime, um sistema de gerenciamento de ponto eletrônico que sim
 
 Além disso, o sistema oferece acesso a administradores, que têm controle total sobre as principais ações do sistema, e a gestores, previamente cadastrados pelos administradores, que gerenciam suas respectivas equipes de forma eficaz.
 
-## 📃 Funcionalidades Principais
+## 📃 Funcionalidades Principais 
 
 - **Registro de Ponto:**
   - Os usuários podem facilmente registrar suas horas trabalhadas de forma rápida e precisa.
