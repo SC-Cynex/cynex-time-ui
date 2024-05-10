@@ -3,7 +3,7 @@ import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Button, Row, Col, Form, Space } from "antd";
 import styles from "./PointRegister.module.css";
 import actions from "./actions";
-import Message from "../../components/Message/Message";
+import CTMessage from "../../components/CTMessage/CTMessage";
 
 export default function PointRegister() {
   const [hours, setHours] = useState(actions.currentHours());
@@ -86,7 +86,7 @@ export default function PointRegister() {
         </div>
         <div className={styles.message}>
           {enable && (
-            <Message message={message} type={type} enable={setEnable} />
+            <CTMessage message={message} type={type} enable={setEnable} />
           )}
         </div>
       </div>
