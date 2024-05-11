@@ -17,3 +17,9 @@ bower_components
 psd
 thumb
 sketch
+
+# SonarQube
+.scannerwork
+sonarqube/extensions
+sonarqube/data
+sonarqube/logs
