@@ -17,11 +17,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           labelRequiredMarkColor: "transparent"
         },
         Collapse: {
-          headerBg: "#1F497D",
-          contentBg: "#1F497D",
-          colorText: "white",
-          colorTextHeading: "white",
-          fontSize: "20px"
+          headerBg: "#EFEFEF",
+          contentBg: "#EFEFEF"
         }
       },
     }}

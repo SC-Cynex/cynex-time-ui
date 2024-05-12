@@ -1,0 +1,17 @@
+.general {
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #EFEFEF;
+}
+
+.divider {
+    background-color: #adb5bd;
+    margin: 0 0 30px;
+}
+
+.formTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

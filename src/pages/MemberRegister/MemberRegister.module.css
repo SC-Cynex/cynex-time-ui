@@ -44,3 +44,15 @@
     flex-wrap: wrap;
     margin-top: 10px;
 }
+
+.register {
+    width: 100%;
+    height: 57px;
+    margin-bottom: 25px;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
