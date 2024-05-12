@@ -9,7 +9,7 @@ export default function DefaultPage({ children }) {
       <SiderPage />
       <Layout>
         <HeaderPage />
-        <Layout>
+        <Layout style={{marginTop: '64px', marginLeft: '80px'}}>
           {children}
         </Layout>
       </Layout>

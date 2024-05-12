@@ -33,7 +33,11 @@ const SiderPage = () => {
   const navigate = useNavigate();
   return (
     <Sider
-      className={styles.sider}
+      style={{
+        position: "fixed",
+        height: "100%",
+        zIndex: "1000",
+      }}
       collapsible
       collapsed={collapsed}
       trigger={null}

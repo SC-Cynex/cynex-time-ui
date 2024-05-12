@@ -1,9 +1,15 @@
 import React from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
-import { Collapse, Space, Avatar, Dropdown, Row, Col } from "antd";
+import { Collapse, Space, Avatar, Dropdown, Row, Col, Tooltip } from "antd";
 import members from "../../utils/members";
 import actions from "../PointRegister/actions";
-import { UserOutlined, UnorderedListOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  UnorderedListOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  BellOutlined
+} from "@ant-design/icons";
 import { FaUsersRectangle } from "react-icons/fa6";
 import styles from "./Team.module.css";
 
@@ -12,9 +18,9 @@ export default function Team() {
     const listPoint = actions.getPointRegister();
 
     return (
-      <div className={styles.infoMember}>
+      <div>
         <p className={styles.titleInfo}>Últimas Marcações</p>
-        <Row gutter={16} className={styles.rowPointer}>
+        <Row className={styles.rowPointer}>
           <Space size={40} className={styles.spacePointer}>
             {Array.isArray(listPoint) &&
               listPoint.slice(0, 8).map((item, i) => (
@@ -25,56 +31,78 @@ export default function Team() {
               ))}
           </Space>
         </Row>
-        <Row gutter={16} className={styles.moreInfo}>
-          <Col>
-            <Avatar size={64} icon={<UserOutlined />} />
-          </Col>
-          <Col span={2}>
-            <p className={styles.titleMore}>Cargo</p>
-            <span className={styles.aboutMember}>{position}</span>
-          </Col>
-          <Col span={2}>
-            <p className={styles.titleMore}>Carga Horária</p>
-            <span className={styles.aboutMember}>{workload}</span>
-          </Col>
-          <Col span={2}>
-            <p className={styles.titleMore}>Banco de Horas</p>
-            <span className={styles.aboutMember}>{compTime}</span>
-          </Col>
-        </Row>
+
+        <div style={{ marginTop: '20px' }}>
+          <Row>
+            <Col style={{ marginRight: '30px' }}>
+              <Avatar size={64} icon={<UserOutlined />} />
+            </Col>
+            <Col style={{ marginRight: '30px' }}>
+              <p className={styles.titleMore}>Cargo</p>
+              <span className={styles.aboutMember}>{position}</span>
+            </Col>
+            <Col style={{ marginRight: '30px' }}>
+              <p className={styles.titleMore}>Carga Horária</p>
+              <span className={styles.aboutMember}>{workload}</span>
+            </Col>
+            <Col style={{ marginRight: '30px' }}>
+              <p className={styles.titleMore}>Banco de Horas</p>
+              <span className={styles.aboutMember}>{compTime}</span>
+            </Col>
+          </Row>
+        </div>
       </div>
     );
   };
 
   const itens = [
     {
-      key: '1',
+      key: "1",
       label: (
         <div>
-          <EditOutlined /><span style={{marginLeft: '10px'}}>Editar</span>
+          <EditOutlined />
+          <span style={{ marginLeft: "10px" }}>Editar</span>
         </div>
       ),
     },
     {
-      key: '2',
+      key: "2",
       label: (
         <div>
-          <DeleteOutlined /><span style={{marginLeft: '10px'}}>Excluir</span>
+          <DeleteOutlined />
+          <span style={{ marginLeft: "10px" }}>Excluir</span>
         </div>
       ),
-    }
+    },
   ];
 
-  const genExtra = () => (
-    <Dropdown
-      menu={{
-        items: itens,
-      }}
-      trigger={["click"]}
-      placement="bottomRight"
-    >
-      <UnorderedListOutlined size={20}/>
-    </Dropdown>
+  const genExtra = (name) => (
+    <div>
+      <Tooltip title={`Você tem marcações de ${name} para aprovar`}>
+        <span style={{ marginRight: '10px' }}>
+          <BellOutlined 
+            style={{ fontSize: '20px' }} 
+            onClick={(event) => {
+              event.stopPropagation(); //Impede que o abra o Collapse
+            }}  
+          />
+        </span>
+      </Tooltip>
+      <Dropdown
+        menu={{
+          items: itens,
+        }}
+        trigger={["click"]}
+        placement="bottomRight"
+      >
+        <UnorderedListOutlined
+          style={{ fontSize: '20px' }}
+          onClick={(event) => {
+            event.stopPropagation(); //Impede que o abra o Collapse
+          }}
+        />
+      </Dropdown>
+    </div>
   );
 
   return (
@@ -96,12 +124,17 @@ export default function Team() {
                       {member.name}
                     </span>
                   ),
-                  children: memberInfo(member.position, member.workload, member.compTime),
-                  showArrow: false,
-                  extra: genExtra(),
+                  children: memberInfo(
+                    member.position,
+                    member.workload,
+                    member.compTime
+                  ),
+                  extra: genExtra(member.name),
                 },
               ]}
+              expandIconPosition={"end"}
               className={styles.userCollapse}
+              size="large"
             />
           ))}
         </div>

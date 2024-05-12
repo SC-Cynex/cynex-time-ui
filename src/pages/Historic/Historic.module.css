@@ -1,0 +1,21 @@
+.historic {
+    margin: 40px 80px 0 80px;
+}
+
+.userHistoric {
+    margin-top: 20px;
+    padding: 25px;
+    background-color: #EFEFEF;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.info {
+    width: 20%;
+}
+
+.info p {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
