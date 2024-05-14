@@ -5,6 +5,7 @@ import MemberRegister from '../pages/MemberRegister/MemberRegister';
 import PointRegister from '../pages/PointRegister/PointRegister';
 import Settings from '../pages/Settings/Settings';
 import Team from '../pages/Team/Team';
+import TeamManagement from '../pages/TeamManagement/TeamManagement';
 
 const routes = [
     {
@@ -34,6 +35,10 @@ const routes = [
     {
         path: '/team',
         component: Team,
+    },
+    {
+        path: '/team-management',
+        component: TeamManagement,
     }
 ];
 

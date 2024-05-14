@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Collapse, Space, Avatar, Row, Col, Button, ConfigProvider, Tooltip } from "antd";
 import members from "../../utils/members";
@@ -9,8 +9,11 @@ import {
 } from "@ant-design/icons";
 import { FaUsersRectangle } from "react-icons/fa6";
 import styles from "./MemberRegister.module.css";
+import ModalRegister from "./ModalRegister";
 
 export default function MemberRegister() {
+  const [modalRegister, setShowRegister] = useState(false);
+
   const memberInfo = (position, workload, compTime) => {
     const listPoint = actions.getPointRegister();
 
@@ -75,7 +78,11 @@ export default function MemberRegister() {
             }}
           >
             <Tooltip title="Registre um novo membro aqui" placement="bottom">
-              <Button size="large" className={styles.register}>
+              <Button 
+                size="large" 
+                className={styles.register}
+                onClick={() => setShowRegister(true)}
+              >
                 <PlusCircleFilled style={{ fontSize: '25px' }} />
               </Button>
             </Tooltip>
@@ -108,6 +115,10 @@ export default function MemberRegister() {
             />
           ))}
         </div>
+        <ModalRegister
+          open={modalRegister}
+          close={() => setShowRegister(false)}
+        />
       </div>
     </DefaultPage>
   );

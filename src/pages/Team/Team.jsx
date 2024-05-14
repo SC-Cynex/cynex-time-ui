@@ -55,7 +55,7 @@ export default function Team() {
     );
   };
 
-  const itens = [
+  const items = [
     {
       key: "1",
       label: (
@@ -63,7 +63,7 @@ export default function Team() {
           <EditOutlined />
           <span style={{ marginLeft: "10px" }}>Editar</span>
         </div>
-      ),
+      )
     },
     {
       key: "2",
@@ -90,7 +90,7 @@ export default function Team() {
       </Tooltip>
       <Dropdown
         menu={{
-          items: itens,
+          items
         }}
         trigger={["click"]}
         placement="bottomRight"
