@@ -8,6 +8,7 @@ import { GiStopwatch } from "react-icons/gi";
 import { LuHistory } from "react-icons/lu";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaUserGroup } from "react-icons/fa6";
+import { MdManageAccounts } from "react-icons/md";
 
 const { Sider } = Layout;
 
@@ -24,6 +25,7 @@ const items = [
   getItem("Registrar Ponto", "/point-register", <GiStopwatch size={20}/>),
   getItem("Histórico", "/historic", <LuHistory size={20}/>),
   getItem("Registrar Membro", "/member-register", <IoDocumentTextOutline size={20}/>),
+  getItem("Gestão de Equipe", "/team-management", <MdManageAccounts size={25}/>),
   getItem("Equipe", "/team", <FaUserGroup size={20}/>),
   getItem("Configurações", "/settings", <IoSettingsOutline size={20}/>)
 ];
