@@ -21,7 +21,14 @@ export default {
         setStatus(data.status);
         setIsLoading(false);
         if (data.statusCode === 202) {
-          localStorage.setItem("token", data.token);
+          const expires = new Date();
+          expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000);
+          document.cookie = `token=${
+            data.token
+          };expires=${expires.toUTCString()};path=/`;
+
+          localStorage.setItem("id", data.user);
+
           window.location = "/point-register";
         }
       })

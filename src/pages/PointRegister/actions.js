@@ -1,5 +1,5 @@
 export default {
-    // Retornar hora atual
+  // Retornar hora atual
   currentHours: () => {
     const options = {
       hour: "2-digit",
@@ -9,28 +9,29 @@ export default {
     };
     return new Date().toLocaleTimeString("pt-BR", options);
   },
-    // Retornar data atual
+  // Retornar data atual
   currentDate: () => {
     const currentDate = new Date();
     const options = { day: "2-digit", month: "long", year: "numeric" };
     return currentDate.toLocaleDateString("pt-BR", options);
   },
-    // Registrar ponto no localStorage
+  // Registrar ponto no localStorage
   setPointRegister: (hours, date, setMessage, setType, setEnable) => {
-    var score = parseInt(localStorage.getItem("score"));
-    if (isNaN(score) || score == 8) {
-      score = 0;
-    }
-    score += 1;
-    localStorage.setItem("score", score);
     var register = {
-      horas: hours,
-      data: date,
+      hour: hours,
+      user: parseInt(localStorage.getItem("id")),
     };
-    localStorage.setItem("point" + score, JSON.stringify(register));
-    setEnable(true);
-    setMessage("Seu ponto foi registrado com sucesso às " + hours + ".");
-    setType("success");
+    fetch("http://localhost:3000/point", {
+      method: "POST",
+      body: JSON.stringify(register),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setEnable(true);
+        setMessage(data.message);
+        setType("success");
+      });
   },
   // Pegar horas registradas no localStorage
   getPointRegister: () => {

@@ -13,7 +13,7 @@ export default function Login() {
   const [enable, setEnable] = useState(false);
   const [status, setStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   return (
     <div>
       <section className={stylesAuth.sectionLeft}>
@@ -75,7 +75,7 @@ export default function Login() {
         {
           enable && <div className={styles.feedback}>
             <CTMessage message={message} type={status} enable={setEnable} />
-            </div>
+          </div>
         }
       </section>
       <section className={stylesAuth.sectionRight}>
