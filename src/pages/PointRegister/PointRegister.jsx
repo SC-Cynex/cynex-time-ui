@@ -6,19 +6,24 @@ import actions from "./actions";
 import CTMessage from "../../components/CTMessage/CTMessage";
 
 export default function PointRegister() {
-   const [hours, setHours] = useState(actions.currentHours());
+  const [hours, setHours] = useState(actions.currentHours());
   const [date, setDate] = useState(actions.currentDate());
   const [listPoint, setListPoint] = useState([]);
   const [enable, setEnable] = useState(false);
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
-    actions.getPointRegister()
-      .then(data => setListPoint(data))
-      .catch(error => console.error("Erro ao buscar os últimos oito registros:", error));
+    if (refresh) {
+      actions.getPointRegister()
+        .then(data => setListPoint(data))
+        .catch(error => console.error("Erro ao buscar os últimos oito registros:", error));
+    }
+  }, [refresh]);
 
+  useEffect(() => {
     const intervalId = setInterval(() => {
       setHours(actions.currentHours());
       setDate(actions.currentDate());
@@ -26,13 +31,12 @@ export default function PointRegister() {
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  })
 
-  const handleRegisterPoint = () => {
-    actions.setPointRegister(hours, setMessage, setStatus, setEnable, setIsLoading);
-    actions.getPointRegister()
-      .then(data => setListPoint(data))
-      .catch(error => console.error("Erro ao buscar os últimos oito registros:", error));
+  const handleRegisterPoint = async () => {
+    setRefresh(false);
+    await actions.setPointRegister(hours, setMessage, setStatus, setEnable, setIsLoading)
+    setRefresh(true);
   };
 
   return (
@@ -68,7 +72,7 @@ export default function PointRegister() {
           <Row justify={"center"}>
             <span>Últimas Marcações</span>
           </Row>
-          <Row justify={"center"} style={{marginBottom: '20px'}}>
+          <Row justify={"center"} style={{ marginBottom: '20px' }}>
             <Space size={80}>
               {Array.isArray(listPoint) &&
                 listPoint.slice(0, 4).map((item, i) => (
