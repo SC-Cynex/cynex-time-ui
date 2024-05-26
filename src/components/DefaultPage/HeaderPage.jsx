@@ -8,9 +8,14 @@ import { Divider } from "antd";
 import { Dropdown } from 'antd';
 import { CiLogout } from "react-icons/ci";
 
+
 const user = [
   {
-    onclick: () => localStorage.removeItem('token'),
+    onClick: () => {
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      localStorage.removeItem('id')
+      window.location.href = '/login';
+    },
     key: '1',
     label: (
       <div className={styles.logout}>

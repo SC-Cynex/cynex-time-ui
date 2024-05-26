@@ -6,15 +6,19 @@ import actions from "./actions";
 import CTMessage from "../../components/CTMessage/CTMessage";
 
 export default function PointRegister() {
-  const [hours, setHours] = useState(actions.currentHours());
+   const [hours, setHours] = useState(actions.currentHours());
   const [date, setDate] = useState(actions.currentDate());
   const [listPoint, setListPoint] = useState([]);
   const [enable, setEnable] = useState(false);
-  const [type, setType] = useState("");
+  const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setListPoint(actions.getPointRegister());
+    actions.getPointRegister()
+      .then(data => setListPoint(data))
+      .catch(error => console.error("Erro ao buscar os últimos oito registros:", error));
+
     const intervalId = setInterval(() => {
       setHours(actions.currentHours());
       setDate(actions.currentDate());
@@ -25,8 +29,10 @@ export default function PointRegister() {
   }, []);
 
   const handleRegisterPoint = () => {
-    actions.setPointRegister(hours, date, setMessage, setType, setEnable);
-    setListPoint(actions.getPointRegister());
+    actions.setPointRegister(hours, setMessage, setStatus, setEnable, setIsLoading);
+    actions.getPointRegister()
+      .then(data => setListPoint(data))
+      .catch(error => console.error("Erro ao buscar os últimos oito registros:", error));
   };
 
   return (
@@ -46,6 +52,7 @@ export default function PointRegister() {
           <Col span={4}>
             <Form.Item>
               <Button
+                loading={isLoading}
                 className={styles.btnRegister}
                 onClick={handleRegisterPoint}
                 type="primary"
@@ -86,7 +93,7 @@ export default function PointRegister() {
         </div>
         <div className={styles.message}>
           {enable && (
-            <CTMessage message={message} type={type} enable={setEnable} />
+            <CTMessage message={message} type={status} enable={setEnable} />
           )}
         </div>
       </div>

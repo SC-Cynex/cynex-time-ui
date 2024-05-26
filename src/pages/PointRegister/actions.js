@@ -15,34 +15,57 @@ export default {
     const options = { day: "2-digit", month: "long", year: "numeric" };
     return currentDate.toLocaleDateString("pt-BR", options);
   },
-  // Registrar ponto no localStorage
-  setPointRegister: (hours, date, setMessage, setType, setEnable) => {
+  setPointRegister: (hours, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    var userId = parseInt(localStorage.getItem("id"));
     var register = {
       hour: hours,
-      user: parseInt(localStorage.getItem("id")),
+      user: { connect: { id: userId } },
     };
     fetch("http://localhost:3000/point", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(register),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        setEnable(true);
         setMessage(data.message);
-        setType("success");
+        setEnable(true);
+        setStatus(data.status);
+        setIsLoading(false);
       });
   },
-  // Pegar horas registradas no localStorage
+
   getPointRegister: () => {
-    var qtd = Object.keys(localStorage);
-    var array = [];
-    for (var i = 1; i <= qtd.length - 1; i++) {
-      array[i] = JSON.parse(localStorage.getItem("point" + i));
-      var arrayNotNull = array.filter(function (i) {
-        return i;
+    const userId = localStorage.getItem("id");
+    return fetch(`http://localhost:3000/point/last-eight/${userId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erro ao buscar os últimos oito registros");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        return data.map((item) => ({
+          horas: item.hour,
+          data: formatarData(item.createdAt)
+        }));
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar os últimos oito registros:", error);
+        throw error;
       });
-    }
-    return arrayNotNull;
   },
+};
+
+const formatarData = (dataString) => {
+  const data = new Date(dataString);
+  const options = { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  };
+  return data.toLocaleDateString('pt-BR', options);
 };
