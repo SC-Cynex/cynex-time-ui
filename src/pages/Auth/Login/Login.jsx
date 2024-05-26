@@ -16,8 +16,6 @@ export default function Login() {
         </div>
         <h1 className={styles.titleForms}>Login</h1>
         <Form
-          action=""
-          method="post"
           style={{ width: "300px" }}
           onFinish={actions.signIn}
           className={styles.form}
