@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import { Form, Button, Input } from "antd";
 import styles from "./Login.module.css";
 import stylesAuth from "../Auth.module.css";
 import actions from "./actions.js";
+import CTMessage from "../../../components/CTMessage/CTMessage.jsx"
 
 export default function Login() {
+  // Feedback
+  const [message, setMessage] = useState('');
+  const [enable, setEnable] = useState(false);
+  const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  
   return (
     <div>
       <section className={stylesAuth.sectionLeft}>
@@ -17,9 +24,10 @@ export default function Login() {
         <h1 className={styles.titleForms}>Login</h1>
         <Form
           style={{ width: "300px" }}
-          onFinish={actions.signIn}
+          onFinish={(values) => actions.signIn(values, setMessage, setEnable, setStatus, setIsLoading)}
           className={styles.form}
         >
+
           <Form.Item
             name={"email"}
             rules={[
@@ -56,7 +64,7 @@ export default function Login() {
             />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" block size="large">
+            <Button loading={isLoading} type="primary" htmlType="submit" block size="large">
               Entrar
             </Button>
           </Form.Item>
@@ -64,6 +72,11 @@ export default function Login() {
             Esqueceu sua senha?
           </a>
         </Form>
+        {
+          enable && <div className={styles.feedback}>
+            <CTMessage message={message} type={status} enable={setEnable} />
+            </div>
+        }
       </section>
       <section className={stylesAuth.sectionRight}>
         <div className={stylesAuth.divTitle}>

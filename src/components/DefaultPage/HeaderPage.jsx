@@ -10,6 +10,7 @@ import { CiLogout } from "react-icons/ci";
 
 const user = [
   {
+    onclick: () => localStorage.removeItem('token'),
     key: '1',
     label: (
       <div className={styles.logout}>
@@ -22,21 +23,21 @@ const user = [
 export default function HeaderPage() {
   return (
     <Header className={styles.header}>
-        <div className={styles.icons}>
-          <Dropdown
-            menu={{
-              items: user,
-            }}
-            trigger={['click']}
-            placement="bottomRight"
-            className={styles.user}
-          >
-            <FaUserAlt size={20}/>
-          </Dropdown>
-          <Divider type="vertical" className={styles.divider} />
-          <FaBell size={20}/>
-        </div>
-        <h1>Cynextime</h1>
+      <div className={styles.icons}>
+        <Dropdown
+          menu={{
+            items: user,
+          }}
+          trigger={['click']}
+          placement="bottomRight"
+          className={styles.user}
+        >
+          <FaUserAlt size={20} />
+        </Dropdown>
+        <Divider type="vertical" className={styles.divider} />
+        <FaBell size={20} />
+      </div>
+      <h1>Cynextime</h1>
     </Header>
   );
 }
