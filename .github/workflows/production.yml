@@ -2,13 +2,20 @@ name: React build & upload artifact
 
 on:
   push:
-    branches: [ '*' ]
+    branches:
+      - master
   pull_request:
-    branches: [ '*' ]
+    branches:
+      - master
+    types:
+      - closed
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 21.x]
 
     steps:
       - name: Checkout code
@@ -17,21 +24,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
       - name: Install dependencies and build
         run: |
           npm install
           npm run build
-          
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4.2.0
-        with:
-          name: ui-build
-          path: dist
-          retention-days: 1
 
   docker:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     needs: build
-    uses: ./.github/workflows/Docker.yml
+    uses: ./.github/workflows/docker-build-and-push.yml
     secrets: inherit
