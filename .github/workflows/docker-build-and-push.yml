@@ -4,22 +4,7 @@ on:
   workflow_call: 
 
 jobs:
-  download_image:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Download a Build Artifact
-        uses: actions/download-artifact@v4.1.1
-        with:
-          name: ui-build
-
-      - name: Message
-        run: |
-          echo "Artifact downloaded proceeding to upload the image on docker hub" >> $GITHUB_STEP_SUMMARY
-
-  docker:
-    needs: download_image
+  docker-build-and-push:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -39,8 +24,9 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: cynexsc/ui-build
+        tags: cynexsc/cynex-time-ui:${{ github.ref_name }}
 
     - name: Message
       run: |
-          echo "Image uploaded successfully to docker hub!" >> $GITHUB_STEP_SUMMARY
+        echo "Image uploaded successfully to Docker Hub!" >> $GITHUB_STEP_SUMMARY
+        echo "Image name: cynexsc/cynex-time-ui:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
