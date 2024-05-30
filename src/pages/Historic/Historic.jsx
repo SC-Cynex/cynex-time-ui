@@ -4,7 +4,6 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Row, Col, Select, Input, Table, Button } from 'antd';
 import styles from "./Historic.module.css";
 import months from "../../utils/months";
-import data from "../../utils/historic";
 
 export default function Historic() {
   const [showJustify, setShowJustify] = useState(false);
