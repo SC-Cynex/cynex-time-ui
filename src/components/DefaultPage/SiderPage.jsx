@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import styles from './SiderPage.module.css';
 import { Layout, Menu, Button, Divider } from "antd";
-import { IoSettingsOutline } from "react-icons/io5";
+import { FaUserCog } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
-import { GiStopwatch } from "react-icons/gi";
-import { LuHistory } from "react-icons/lu";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { FaUserGroup } from "react-icons/fa6";
-import { MdManageAccounts } from "react-icons/md";
+import { FaUserClock } from "react-icons/fa";
+import { FaClock } from "react-icons/fa";
+import { FaAddressBook } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
+
+
+import { FaUsersCog } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 
 const { Sider } = Layout;
 
@@ -22,12 +25,13 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem("Registrar Ponto", "/point-register", <GiStopwatch size={20}/>),
-  getItem("Histórico", "/historic", <LuHistory size={20}/>),
-  getItem("Registrar Membro", "/member-register", <IoDocumentTextOutline size={20}/>),
-  getItem("Gestão de Equipe", "/team-management", <MdManageAccounts size={25}/>),
-  getItem("Equipe", "/team", <FaUserGroup size={20}/>),
-  getItem("Configurações", "/settings", <IoSettingsOutline size={20}/>)
+  getItem("Registrar Ponto", "/point-register", <FaClock size={20}/>),
+  getItem("Histórico", "/historic", <FaUserClock size={20}/>),
+  getItem("Incluir Membro", "/member-register", <FaUserPlus size={20}/>),
+  getItem("Gestão de Equipe", "/team-management", <FaUsersCog size={20}/>),
+  getItem("Equipe", "/team", <FaUsers size={20}/>),
+  getItem("Registrar Membro", "/register", <FaAddressBook  size={20}/>),
+  getItem("Configurações", "/settings", <FaUserCog size={20}/>)
 ];
 
 const SiderPage = () => {

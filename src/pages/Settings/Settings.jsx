@@ -8,10 +8,10 @@ export default function Settings() {
   return (
     <DefaultPage>
       <div className={styles.settings}>
-          <div className={styles.form_settings}>
-            <FormSettings />
-          </div>
-          </div>
+        <div className={styles.form_settings}>
+          <FormSettings />
+        </div>
+      </div>
     </DefaultPage>
   )
 }

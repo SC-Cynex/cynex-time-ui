@@ -23,20 +23,20 @@ export default function Historic() {
 
   useEffect(() => {
     fetch(`http://localhost:3000/point/historic/${userId}/${currentMonth}`)
-    .then(response => response.json())
-    .then(data => {
-      let gridData = data.historic.map((item) => {
-        const date = new Date(item.createdAt);
-        const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-        return {
-          key: item.id,
-          date: formattedDate,
-          marking: item.hour,
-        };
+      .then(response => response.json())
+      .then(data => {
+        let gridData = data.historic.map((item) => {
+          const date = new Date(item.createdAt);
+          const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+          return {
+            key: item.id,
+            date: formattedDate,
+            marking: item.hour,
+          };
+        });
+        setData(gridData);
+        setBankHours(data.bankHours);
       });
-      setData(gridData);
-      setBankHours(data.bankHours);
-    });
   }, [setCurrentMonth, currentMonth]);
 
   function getCurrentMonth() {

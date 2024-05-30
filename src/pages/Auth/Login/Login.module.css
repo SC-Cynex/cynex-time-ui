@@ -15,4 +15,6 @@
 .feedback {
     position: fixed;
     bottom: 50px;
+    width: calc(50% - 40px);
+    margin: 20px;
 }

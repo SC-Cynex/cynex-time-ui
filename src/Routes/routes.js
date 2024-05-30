@@ -18,7 +18,7 @@ const routes = [
   {
     path: "/register",
     component: Register,
-    requiresAuth: false,
+    requiresAuth: true,
   },
   {
     path: "/historic",

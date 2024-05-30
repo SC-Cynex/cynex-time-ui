@@ -73,7 +73,8 @@ export default function Login() {
           </a>
         </Form>
         {
-          enable && <div className={styles.feedback}>
+          enable && 
+          <div className={styles.feedback}>
             <CTMessage message={message} type={status} enable={setEnable} />
           </div>
         }

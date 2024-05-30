@@ -31,8 +31,10 @@ export default {
           window.location = "/point-register";
         }
       })
-      .catch((error) => {
-        console.error("Erro:", error);
+      .catch(() => {
+        setMessage('Erro na conexão com o servidor! Favor contatar o administrador do sistema.');
+        setEnable(true);
+        setStatus('error');
         setIsLoading(false);
       });
   },
