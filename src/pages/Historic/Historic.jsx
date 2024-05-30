@@ -5,8 +5,11 @@ import { Avatar, Row, Col, Select, Input, Space, Table, Button } from 'antd';
 import styles from "./Historic.module.css";
 import months from "../../utils/months";
 import data from "../../utils/historic";
+import ModalJustify from './ModalJustify';
 
 export default function Historic() {
+  const [showJustify, setShowJustify] = useState(false);
+
   function getCurrentMonth() {
     const currentDate = new Date();
     return currentDate.getMonth() + 1;
@@ -37,7 +40,11 @@ export default function Historic() {
       title: 'Ocorrência',
       key: 'occurrence',
       render: () => (
-        <Button type='primary' danger>
+        <Button
+          type='primary'
+          danger
+          onClick={() => setShowJustify(true)}
+        >
           Justificar
         </Button>
       ),
@@ -82,6 +89,10 @@ export default function Historic() {
           </Col>
         </Row>
         <Table columns={columns} dataSource={data} style={{ marginTop: '40px' }} />
+        <ModalJustify
+          open={showJustify}
+          close={() => setShowJustify(false)}
+        />
       </div>
     </DefaultPage>
   )

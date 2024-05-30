@@ -5,7 +5,7 @@ import styles from "./NotFound.module.css";
 
 export default function NotFound() {
   return (
-    <DefaultPage>
+    <div>
       <Result
         status="error"
         title="Falha no envio"
@@ -13,6 +13,6 @@ export default function NotFound() {
         className={styles.result}
       >
       </Result>
-    </DefaultPage>
+    </div>
   )
 }

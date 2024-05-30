@@ -12,7 +12,7 @@ import styles from "./MemberRegister.module.css";
 import ModalRegister from "./ModalRegister";
 
 export default function MemberRegister() {
-  const [modalRegister, setShowRegister] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   const memberInfo = (position, workload, compTime) => {
     const listPoint = actions.getPointRegister();
@@ -116,7 +116,7 @@ export default function MemberRegister() {
           ))}
         </div>
         <ModalRegister
-          open={modalRegister}
+          open={showRegister}
           close={() => setShowRegister(false)}
         />
       </div>
