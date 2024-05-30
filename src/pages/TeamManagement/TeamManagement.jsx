@@ -3,7 +3,6 @@ import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Button, Tabs, Table } from "antd";
 import styles from "./TeamManagement.module.css";
 import workedHoursData from "../../utils/workedHours";
-import teamData from "../../utils/team";
 import ModalWorkedHours from "./ModalWorkedHours";
 import ModalPositions from "./ModalPositions";
 import ModalTeams from "./ModalTeams";
@@ -17,13 +16,13 @@ function TeamManagement() {
     const [showDelete, setShowDelete] = useState(false);
     const [editRecord, setEditRecord] = useState(null);
     const [editType, setEditType] = useState(null);
-    const [teams, setTeams] = useState([]);
+    const [teamsData, setTeamsData] = useState([]);
     const [refresh, setRefresh] = useState(true);
 
     useEffect(() => {
         if (refresh) {
             actions.getTeamsRegister()
-                .then(data => setTeams(data))
+                .then(data => setTeamsData(data))
                 .catch(error => console.error("Erro ao buscar as equipes:", error));
         }
     }, [refresh]);
@@ -96,108 +95,6 @@ function TeamManagement() {
             .catch(error => console.error('Error fetching positions:', error));
     }, []);
 
-    const workedHours = () => {
-        const columns = [
-            {
-                title: 'Horário de Trabalho',
-                dataIndex: 'workedHours',
-                key: 'workedHours',
-            },
-            {
-                title: 'Ações',
-                key: 'actions',
-                render: () => (
-                    <div>
-                        <Button type='primary' style={{ marginRight: '20px' }}>
-                            Editar
-                        </Button>
-                        <Button type='primary' danger>
-                            Deletar
-                        </Button>
-                    </div>
-                ),
-                width: 250
-            }
-        ];
-
-        return (
-            <div>
-                <Button type="primary" onClick={() => setShowWorkedHours(true)}>
-                    Adicionar Horário
-                </Button>
-                <Table columns={columns} dataSource={workedHoursData} style={{ marginTop: '40px' }} />
-            </div>
-        )
-    }
-
-    const positions = () => {
-        const columns = [
-            {
-                title: 'Cargo de Trabalho',
-                dataIndex: 'name', // Assuming 'name' is the correct field from your API data
-                key: 'name',
-            },
-            {
-                title: 'Ações',
-                key: 'actions',
-                render: () => (
-                    <div>
-                        <Button type='primary' style={{ marginRight: '20px' }}>
-                            Editar
-                        </Button>
-                        <Button type='primary' danger>
-                            Deletar
-                        </Button>
-                    </div>
-                ),
-                width: 250
-            }
-        ];
-
-        return (
-            <div>
-                <Button type="primary" onClick={() => setShowPositions(true)}>
-                    Adicionar Cargos
-                </Button>
-                <Table columns={columns} dataSource={positionsData} style={{ marginTop: '40px' }} />
-            </div>
-        )
-    }
-
-    const teams = () => {
-        const columns = [
-            {
-                title: 'Equipe',
-                dataIndex: 'team',
-                key: 'team',
-            },
-            {
-                title: 'Ações',
-                key: 'actions',
-                render: () => (
-                    <div>
-                        <Button type='primary' style={{ marginRight: '20px' }}>
-                            Editar
-                        </Button>
-                        <Button type='primary' danger>
-                            Deletar
-                        </Button>
-                    </div>
-                ),
-                width: 250
-            }
-        ];
-
-        return (
-            <div>
-                <Button type="primary" onClick={() => setShowTeams(true)}>
-                    Adicionar Equipe
-                </Button>
-                <Table columns={columns} dataSource={teamData} style={{ marginTop: '40px' }} />
-            </div>
-        )
-    }
-
     const items = [
         {
             key: '1',
@@ -212,7 +109,7 @@ function TeamManagement() {
         {
             key: '3',
             label: 'Equipes',
-            children: createTabContent('name', teams, setShowTeams),
+            children: createTabContent('name', teamsData, setShowTeams),
         },
     ];
 
