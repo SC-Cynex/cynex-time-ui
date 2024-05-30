@@ -1,19 +1,54 @@
 export default {
   registerUser: async (values) => {
     try {
-      const res = await fetch("http://localhost:3000/user/register", {
+      // Registrar o endereço
+      const dataAddress = {
+        street: values.street,
+        city: values.city,
+        state: values.state,
+        zipCode: values.cep,
+        neighborhood: values.neighborhood,
+        number: values.number,
+      };
+
+      const addressResponse = await fetch("http://localhost:3000/address", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(dataAddress),
       });
 
-      if (!res.ok) {
-        throw new Error("Erro ao registrar um usuário!");
+      if (!addressResponse.ok) {
+        throw new Error("Erro ao registrar o endereço!");
       }
 
-      return await res.json();
+      const addressData = await addressResponse.json();
+      const addressId = addressData.id;
+
+      const userData = {
+        name: values.name,
+        email: values.name,
+        password: values.password,
+        roleId: values.role,
+        hourId: values.hour,
+        teamId: values.team,
+        addressId: addressId,
+      };
+
+      const userResponse = await fetch("http://localhost:3000/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Erro ao registrar o usuário!");
+      }
+
+      return await userResponse.json();
     } catch (error) {
       console.error("Erro no registro de usuário:", error);
       throw error;
@@ -37,6 +72,42 @@ export default {
       };
     } catch (error) {
       console.error("Erro ao buscar endereço:", error);
+      throw error;
+    }
+  },
+
+  getHourRegister: async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/hour`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os horários");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar os horários:", error);
+      throw error;
+    }
+  },
+
+  getRoleRegister: async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/role`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os cargos");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar os cargos:", error);
       throw error;
     }
   },

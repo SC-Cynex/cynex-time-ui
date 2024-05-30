@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Input, Select, Col, Row } from "antd";
 import styles from "./Register.module.css";
 import { FaLocationDot } from "react-icons/fa6";
@@ -8,7 +8,19 @@ import action_register from './action_register';
 export default function FormRegister() {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const [hours, setHours] = useState([]);
+    const [roles, setRoles] = useState([]);
     const [addressFieldsDisabled, setAddressFieldsDisabled] = useState(true);
+
+    useEffect(() => {
+        action_register.getHourRegister().then((data) => {
+            setHours(data);
+        })
+
+        action_register.getRoleRegister().then((data) => {
+            setRoles(data);
+        })
+    }, [])
 
     const onSearch = async (value) => {
         try {
@@ -30,19 +42,9 @@ export default function FormRegister() {
 
     const handleRegister = async (values) => {
         try {
-            console.log('Form values:', values);
-            const addressData = await action_register.fetchAddress(values.cep);
-
-            // Setando os valores dos campos do endereço no formulário
-            form.setFieldsValue({
-                cidade: addressData.localidade,
-                estado: addressData.uf,
-                bairro: addressData.bairro,
-                rua: addressData.logradouro,
+            action_register.registerUser(values).then((data) => {
+                console.log(data);
             });
-
-            // Continuar com o registro do usuário
-            // action_register.registerUser(values);
         } catch (error) {
             console.error('Erro ao buscar endereço:', error);
         }
@@ -97,10 +99,25 @@ export default function FormRegister() {
                     <Col span={12}>
                         <Form.Item
                             name="hour"
-                            label="Horário"
+                            label="Horário de Trabalho"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Escolha um horário de trabalho!'
+                                }
+                            ]}
                             hasFeedback
                         >
-                            <Select size="large" />
+                            <Select size="large"
+                                options={
+                                    hours.map(item => (
+                                        {
+                                            label: item.start + ' às ' + item.end,
+                                            value: item.id
+                                        }
+                                    ))
+                                }
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -130,7 +147,16 @@ export default function FormRegister() {
                             label="Cargo"
                             hasFeedback
                         >
-                            <Select size="large" />
+                            <Select size="large"
+                                options={
+                                    roles.map(item => (
+                                        {
+                                            label: item.name,
+                                            value: item.id
+                                        }
+                                    ))
+                                }
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -162,7 +188,9 @@ export default function FormRegister() {
                             hasFeedback
                         >
                             <Input.Search
-                                allowClear
+                                allowClear={() => {
+                                    se
+                                }}
                                 onSearch={onSearch}
                                 loading={loading}
                                 size='large'
@@ -192,6 +220,7 @@ export default function FormRegister() {
                             label="Cidade"
                             rules={[
                                 {
+                                    required: true,
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
@@ -206,6 +235,7 @@ export default function FormRegister() {
                             label="Rua"
                             rules={[
                                 {
+                                    required: true,
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
@@ -222,6 +252,7 @@ export default function FormRegister() {
                             label="Bairro"
                             rules={[
                                 {
+                                    required: true,
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
@@ -236,6 +267,7 @@ export default function FormRegister() {
                             label="Número"
                             rules={[
                                 {
+                                    required: true,
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
