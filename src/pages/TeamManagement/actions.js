@@ -151,4 +151,53 @@ export default {
       throw error;
     }
   },
+  // CRUD Departamento
+  setDepartmentsRegister: async (name, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      var register = {
+        name: name
+      };
+
+      const response = await fetch("http://localhost:3000/department", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(register),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao registrar departamento:", error);
+      setMessage("Erro ao registrar departamento");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
+      throw error;
+    }
+  },
+  getDepartments : async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/department`, {
+        method: "GET",
+      }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os departamentos");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar os departamentos:", error);
+      throw error;
+    }
+  }
 }

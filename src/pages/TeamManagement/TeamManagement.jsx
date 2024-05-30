@@ -8,11 +8,13 @@ import ModalTeams from "./ModalTeams";
 import ModalDelete from "./ModalDelete";
 import actions from './actions';
 import CTMessage from "../../components/CTMessage/CTMessage";
+import ModalDepartment from "./ModalDepartment";
 
 export default function TeamManagement() {
     const [showWorkedHours, setShowWorkedHours] = useState(false);
     const [showPositions, setShowPositions] = useState(false);
     const [showTeams, setShowTeams] = useState(false);
+    const [showDepartments, setShowDepartments] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [editRecord, setEditRecord] = useState(null);
     const [editType, setEditType] = useState(null);
@@ -23,6 +25,7 @@ export default function TeamManagement() {
     const [teamsData, setTeamsData] = useState([]);
     const [positionsData, setPositionsData] = useState([]);
     const [workedHoursData, setWorkedHoursData] = useState([]);
+    const [departmentsData, setDepartmentsData] = useState([]);
 
     useEffect(() => {
         if (refresh) {
@@ -53,23 +56,31 @@ export default function TeamManagement() {
                 .catch(error => console.error("Erro ao buscar os horários:", error));
         }
     }, [refresh]);
-    
+
+    useEffect(() => {
+        if (refresh) {
+            actions.getDepartments()
+                .then(data => setDepartmentsData(data))
+                .catch(error => console.error("Erro ao buscar os departamentos:", error));
+        }
+    }, [refresh]);
+
     const calculateWorkHours = (startString, endString, lunchTimeString) => {
         const [startHours, startMinutes, startSeconds] = startString.split(':').map(Number);
         const [endHours, endMinutes, endSeconds] = endString.split(':').map(Number);
         const [lunchHours, lunchMinutes, lunchSeconds] = lunchTimeString.split(':').map(Number);
-    
+
         const startTimeInMinutes = startHours * 60 + startMinutes;
         const endTimeInMinutes = endHours * 60 + endMinutes;
         const lunchTimeInMinutes = lunchHours * 60 + lunchMinutes;
-    
+
         const workTimeInMinutes = endTimeInMinutes - startTimeInMinutes - lunchTimeInMinutes;
-    
+
         const workHours = (workTimeInMinutes / 60).toFixed(2);
-    
+
         return parseFloat(workHours) + 'h';
-    };  
-    
+    };
+
     const handleEdit = (type, record) => {
         setEditRecord(record);
         setEditType(type);
@@ -79,6 +90,8 @@ export default function TeamManagement() {
             setShowPositions(true);
         } else if (type === 'team') {
             setShowTeams(true);
+        } else if (type === 'department') {
+            setShowDepartments(true);
         }
     };
 
@@ -120,6 +133,12 @@ export default function TeamManagement() {
                     key: 'workHours',
                 },
             ];
+        } else if (type === 'department') {
+            columns.push({
+                title: 'Departamento',
+                dataIndex: column,
+                key: column,
+            });
         } else {
             columns.push({
                 title: type === 'positions' ? 'Cargo de Trabalho' : 'Equipe',
@@ -155,7 +174,7 @@ export default function TeamManagement() {
                 setEditType(type);
                 modalSetter(true);
             }}>
-                {`Adicionar ${type === 'workedHours' ? 'Horário' : type === 'positions' ? 'Cargos' : 'Equipe'}`}
+                {`Adicionar ${type === 'workedHours' ? 'Horário' : type === 'positions' ? 'Cargos' : type === 'department' ? 'Departamento' : 'Equipe'}`}
             </Button>
 
             {enable && (
@@ -184,45 +203,58 @@ export default function TeamManagement() {
             label: 'Equipes',
             children: createTabContent('team', teamsData, setShowTeams, 'name'),
         },
-    ];
+        {
+            key: '4',
+            label: 'Departamento',
+            children: createTabContent('department', departmentsData, setShowDepartments, 'name'),
+        }
+        ];
 
-    return (
-        <DefaultPage>
-            <div className={styles.team}>
-                <h1>Gestão de Equipe</h1>
-                <div className={styles.collapse}>
-                    <Tabs defaultActiveKey="1" items={items} onChange={resetMessage} />
+        return (
+            <DefaultPage>
+                <div className={styles.team}>
+                    <h1>Gestão de Equipe</h1>
+                    <div className={styles.collapse}>
+                        <Tabs defaultActiveKey="1" items={items} onChange={resetMessage} />
+                    </div>
                 </div>
-            </div>
-            <ModalWorkedHours
-                open={showWorkedHours}
-                close={() => setShowWorkedHours(false)}
-                setRefresh={setRefresh}
-                message={setMessage}
-                status={setStatus}
-                enable={setEnable}
-            />
-            <ModalPositions
-                open={showPositions}
-                close={() => setShowPositions(false)}
-                setRefresh={setRefresh}
-                message={setMessage}
-                status={setStatus}
-                enable={setEnable}
-            />
-            <ModalTeams
-                open={showTeams}
-                close={() => setShowTeams(false)}
-                setRefresh={setRefresh}
-                message={setMessage}
-                status={setStatus}
-                enable={setEnable}
-            />
-            <ModalDelete
-                open={showDelete}
-                close={() => setShowDelete(false)}
-                type={editType}
-            />
-        </DefaultPage>
-    );
-}
+                <ModalWorkedHours
+                    open={showWorkedHours}
+                    close={() => setShowWorkedHours(false)}
+                    setRefresh={setRefresh}
+                    message={setMessage}
+                    status={setStatus}
+                    enable={setEnable}
+                />
+                <ModalPositions
+                    open={showPositions}
+                    close={() => setShowPositions(false)}
+                    setRefresh={setRefresh}
+                    message={setMessage}
+                    status={setStatus}
+                    enable={setEnable}
+                />
+                <ModalTeams
+                    open={showTeams}
+                    close={() => setShowTeams(false)}
+                    setRefresh={setRefresh}
+                    message={setMessage}
+                    status={setStatus}
+                    enable={setEnable}
+                />
+                <ModalDepartment
+                    open={showDepartments}
+                    close={() => setShowDepartments(false)}
+                    setRefresh={setRefresh}
+                    message={setMessage}
+                    status={setStatus}
+                    enable={setEnable}
+                />
+                <ModalDelete
+                    open={showDelete}
+                    close={() => setShowDelete(false)}
+                    type={editType}
+                />
+            </DefaultPage>
+        );
+    }
