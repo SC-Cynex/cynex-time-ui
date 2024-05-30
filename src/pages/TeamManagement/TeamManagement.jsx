@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Button, Tabs, Table } from "antd";
 import styles from "./TeamManagement.module.css";
-import workedHoursData from "../../utils/workedHours";
 import ModalWorkedHours from "./ModalWorkedHours";
 import ModalPositions from "./ModalPositions";
 import ModalTeams from "./ModalTeams";
@@ -23,6 +22,7 @@ export default function TeamManagement() {
     const [message, setMessage] = useState('');
     const [teamsData, setTeamsData] = useState([]);
     const [positionsData, setPositionsData] = useState([]);
+    const [workedHoursData, setWorkedHoursData] = useState([]);
 
     useEffect(() => {
         if (refresh) {
@@ -32,15 +32,44 @@ export default function TeamManagement() {
         }
     }, [refresh]);
 
-
     useEffect(() => {
         if (refresh) {
             actions.getRoleRegister()
                 .then(data => setPositionsData(data))
-                .catch(error => console.error("Erro ao buscar as equipes:", error));
+                .catch(error => console.error("Erro ao buscar os cargos:", error));
         }
     }, [refresh]);
 
+    useEffect(() => {
+        if (refresh) {
+            actions.getHourRegister()
+                .then(data => {
+                    const newData = data.map(item => {
+                        const workHours = calculateWorkHours(item.start, item.end, item.lunchTime);
+                        return { ...item, workHours };
+                    });
+                    setWorkedHoursData(newData);
+                })
+                .catch(error => console.error("Erro ao buscar os horários:", error));
+        }
+    }, [refresh]);
+    
+    const calculateWorkHours = (startString, endString, lunchTimeString) => {
+        const [startHours, startMinutes, startSeconds] = startString.split(':').map(Number);
+        const [endHours, endMinutes, endSeconds] = endString.split(':').map(Number);
+        const [lunchHours, lunchMinutes, lunchSeconds] = lunchTimeString.split(':').map(Number);
+    
+        const startTimeInMinutes = startHours * 60 + startMinutes;
+        const endTimeInMinutes = endHours * 60 + endMinutes;
+        const lunchTimeInMinutes = lunchHours * 60 + lunchMinutes;
+    
+        const workTimeInMinutes = endTimeInMinutes - startTimeInMinutes - lunchTimeInMinutes;
+    
+        const workHours = (workTimeInMinutes / 60).toFixed(2);
+    
+        return parseFloat(workHours) + 'h';
+    };  
+    
     const handleEdit = (type, record) => {
         setEditRecord(record);
         setEditType(type);
@@ -59,13 +88,47 @@ export default function TeamManagement() {
         setShowDelete(true);
     };
 
-    const generateColumns = (type, column) => [
-        {
-            title: type === 'workedHours' ? 'Horário de Trabalho' : type === 'positions' ? 'Cargo de Trabalho' : 'Equipe',
-            dataIndex: column,
-            key: column,
-        },
-        {
+    const resetMessage = () => {
+        setEnable(false);
+        setMessage('');
+        setStatus(null);
+    };
+
+    const generateColumns = (type, column) => {
+        let columns = [];
+
+        if (type === 'workedHours') {
+            columns = [
+                {
+                    title: 'Entrada',
+                    dataIndex: 'start',
+                    key: 'start',
+                },
+                {
+                    title: 'Saída',
+                    dataIndex: 'end',
+                    key: 'end',
+                },
+                {
+                    title: 'Hora do Almoço',
+                    dataIndex: 'lunchTime',
+                    key: 'lunchTime',
+                },
+                {
+                    title: 'Carga Horária',
+                    dataIndex: 'workHours',
+                    key: 'workHours',
+                },
+            ];
+        } else {
+            columns.push({
+                title: type === 'positions' ? 'Cargo de Trabalho' : 'Equipe',
+                dataIndex: column,
+                key: column,
+            });
+        }
+
+        columns.push({
             title: 'Ações',
             key: 'actions',
             render: (text, record) => (
@@ -79,8 +142,11 @@ export default function TeamManagement() {
                 </div>
             ),
             width: 250,
-        },
-    ];
+        });
+
+        return columns;
+    };
+
 
     const createTabContent = (type, dataSource, modalSetter, column) => (
         <div>
@@ -125,12 +191,16 @@ export default function TeamManagement() {
             <div className={styles.team}>
                 <h1>Gestão de Equipe</h1>
                 <div className={styles.collapse}>
-                    <Tabs defaultActiveKey="1" items={items} />
+                    <Tabs defaultActiveKey="1" items={items} onChange={resetMessage} />
                 </div>
             </div>
             <ModalWorkedHours
                 open={showWorkedHours}
                 close={() => setShowWorkedHours(false)}
+                setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
             />
             <ModalPositions
                 open={showPositions}

@@ -19,7 +19,7 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("Registrar Ponto", "/point-register", <FaClock size={20}/>),
   getItem("Histórico", "/historic", <FaUserClock size={20}/>),
-  getItem("Equipe", "/team", <FaUsers size={20}/>, [
+  getItem("Equipe", "", <FaUsers size={20}/>, [
     getItem("Equipe", "/team", <FaUsers size={20}/>),
     getItem("Incluir Membro", "/member-register", <FaUserPlus size={20}/>),
     getItem("Gestão de Equipe", "/team-management", <FaUsersCog size={20}/>),

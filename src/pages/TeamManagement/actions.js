@@ -100,4 +100,55 @@ export default {
       throw error;
     }
   },
+  // CRUD Horário de trabalho
+  setHourRegister: async (start, end, lunchTime, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      var register = {
+        start: start,
+        end: end,
+        lunchTime: lunchTime
+      };
+
+      const response = await fetch("http://localhost:3000/hour", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(register),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao registrar cargo:", error);
+      setMessage("Erro ao registrar cargo");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
+      throw error;
+    }
+  },
+  getHourRegister: async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/hour`, {
+        method: "GET",
+      }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os horários");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar os horários:", error);
+      throw error;
+    }
+  },
 }
