@@ -1,12 +1,41 @@
-import React, { useState } from 'react'
-import DefaultPage from '../../components/DefaultPage/DefaultPage'
+import React, { useState, useEffect } from 'react';
+import DefaultPage from '../../components/DefaultPage/DefaultPage';
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Row, Col, Select, Input, Space, Table, Button } from 'antd';
+import { Avatar, Row, Col, Select, Input, Table, Button } from 'antd';
 import styles from "./Historic.module.css";
 import months from "../../utils/months";
-import data from "../../utils/historic";
 
 export default function Historic() {
+  const [user, setUser] = useState({});
+  const [bankHours, setBankHours] = useState(0);
+  const [data, setData] = useState([]);
+  const [currentMonth, setCurrentMonth] = useState(getCurrentMonth());
+  const userId = localStorage.getItem('id');
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/user/${userId}`)
+      .then(response => response.json())
+      .then(data => setUser(data));
+  }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/point/historic/${userId}/${currentMonth}`)
+    .then(response => response.json())
+    .then(data => {
+      let gridData = data.historic.map((item) => {
+        const date = new Date(item.createdAt);
+        const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        return {
+          key: item.id,
+          date: formattedDate,
+          marking: item.hour,
+        };
+      });
+      setData(gridData);
+      setBankHours(data.bankHours);
+    });
+  }, [setCurrentMonth, currentMonth]);
+
   function getCurrentMonth() {
     const currentDate = new Date();
     return currentDate.getMonth() + 1;
@@ -29,11 +58,6 @@ export default function Historic() {
       key: 'marking',
     },
     {
-      title: 'Horas Trabalhadas',
-      dataIndex: 'worked',
-      key: 'worked',
-    },
-    {
       title: 'Ocorrência',
       key: 'occurrence',
       render: () => (
@@ -54,12 +78,12 @@ export default function Historic() {
               <Avatar size={64} icon={<UserOutlined />} />
             </Col>
             <Col style={{ marginRight: '50px' }}>
-              <h2>Alexandre Martins da Silva</h2>
-              <p style={{ marginTop: '10px' }}>Gerente de Recursos Humanos</p>
+              <h2>{user.name}</h2>
+              <p style={{ marginTop: '10px' }}>{user.position}</p>
             </Col>
             <Col>
               <h3>Escala</h3>
-              <p style={{ marginTop: '10px' }}>08:00 12:00 13:30 18:00</p>
+              <p style={{ marginTop: '10px' }}>{user.hour}</p>
             </Col>
           </Row>
         </div>
@@ -72,17 +96,18 @@ export default function Historic() {
               }}
               placeholder={'Mês'}
               options={itens}
-              defaultValue={getCurrentMonth()}
+              defaultValue={currentMonth}
               size="large"
+              onChange={setCurrentMonth}
             />
           </Col>
           <Col className={styles.info}>
             <p>Banco de Horas</p>
-            <Input size="large" value={13} suffix={"horas"} />
+            <Input size="large" value={bankHours} suffix={"horas"} readOnly />
           </Col>
         </Row>
         <Table columns={columns} dataSource={data} style={{ marginTop: '40px' }} />
       </div>
     </DefaultPage>
-  )
+  );
 }

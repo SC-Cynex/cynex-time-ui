@@ -2,7 +2,7 @@ export default {
   // função para logar
   signIn: (values, setMessage, setEnable, setStatus, setIsLoading) => {
     setIsLoading(true);
-    var data = {
+    let data = {
       email: values.email,
       password: values.password,
     };

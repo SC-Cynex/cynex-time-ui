@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Button, Tabs, Table } from "antd";
 import styles from "./TeamManagement.module.css";
 import workedHoursData from "../../utils/workedHours";
-import positionsData from "../../utils/positions";
 import teamData from "../../utils/team";
 import ModalWorkedHours from "./ModalWorkedHours";
 import ModalPositions from "./ModalPositions";
@@ -13,7 +12,20 @@ function TeamManagement() {
     const [showWorkedHours, setShowWorkedHours] = useState(false);
     const [showPositions, setShowPositions] = useState(false);
     const [showTeams, setShowTeams] = useState(false);
+    const [positionsData, setPositionsData] = useState([]);
 
+    useEffect(() => {
+        // Fetch positions data
+        fetch('http://localhost:3000/role')
+            .then(response => response.json())
+            .then(data => {
+                const filteredData = data.filter(position => 
+                    !['EMPLOYEE', 'MANAGER', 'ADMIN'].includes(position.name)
+                );
+                setPositionsData(filteredData);
+            })
+            .catch(error => console.error('Error fetching positions:', error));
+    }, []);
 
     const workedHours = () => {
         const columns = [
@@ -27,7 +39,7 @@ function TeamManagement() {
                 key: 'actions',
                 render: () => (
                     <div>
-                        <Button type='primary' style={{marginRight: '20px'}}>
+                        <Button type='primary' style={{ marginRight: '20px' }}>
                             Editar
                         </Button>
                         <Button type='primary' danger>
@@ -53,15 +65,15 @@ function TeamManagement() {
         const columns = [
             {
                 title: 'Cargo de Trabalho',
-                dataIndex: 'positions',
-                key: 'positions',
+                dataIndex: 'name', // Assuming 'name' is the correct field from your API data
+                key: 'name',
             },
             {
                 title: 'Ações',
                 key: 'actions',
                 render: () => (
                     <div>
-                        <Button type='primary' style={{marginRight: '20px'}}>
+                        <Button type='primary' style={{ marginRight: '20px' }}>
                             Editar
                         </Button>
                         <Button type='primary' danger>
@@ -95,7 +107,7 @@ function TeamManagement() {
                 key: 'actions',
                 render: () => (
                     <div>
-                        <Button type='primary' style={{marginRight: '20px'}}>
+                        <Button type='primary' style={{ marginRight: '20px' }}>
                             Editar
                         </Button>
                         <Button type='primary' danger>
@@ -160,4 +172,4 @@ function TeamManagement() {
     );
 }
 
-export default TeamManagement
+export default TeamManagement;

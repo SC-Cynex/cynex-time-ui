@@ -1,9 +1,9 @@
 // App.jsx
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import routes from './Routes/routes';
 import NotFound from './pages/NotFound/NotFound';
 import AuthGuard from './services/authGuard/AuthGuard';
+import routes from './routes/routes';
 
 function App() {
   return (
