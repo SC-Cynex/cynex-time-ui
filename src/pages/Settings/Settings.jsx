@@ -1,6 +1,5 @@
 import React from 'react';
 import DefaultPage from '../../components/DefaultPage/DefaultPage';
-import { FaUserAlt } from "react-icons/fa";
 import FormSettings from './FormSettings';
 import styles from './Settings.module.css';
 

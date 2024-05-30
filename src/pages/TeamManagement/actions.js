@@ -22,8 +22,8 @@ export default {
             setStatus(data.status);
             setIsLoading(false);
         } catch (error) {
-            console.error("Erro ao registrar ponto:", error);
-            setMessage("Erro ao registrar ponto");
+            console.error("Erro ao registrar equipe:", error);
+            setMessage("Erro ao registrar equipe");
             setStatus("error");
             setEnable(false);
             setIsLoading(false);

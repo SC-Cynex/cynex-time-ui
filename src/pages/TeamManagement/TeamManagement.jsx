@@ -8,6 +8,7 @@ import ModalWorkedHours from "./ModalWorkedHours";
 import ModalPositions from "./ModalPositions";
 import ModalTeams from "./ModalTeams";
 import ModalDelete from "./ModalDelete";
+import actions from './actions';
 
 function TeamManagement() {
     const [showWorkedHours, setShowWorkedHours] = useState(false);
@@ -16,6 +17,16 @@ function TeamManagement() {
     const [showDelete, setShowDelete] = useState(false);
     const [editRecord, setEditRecord] = useState(null);
     const [editType, setEditType] = useState(null);
+    const [teams, setTeams] = useState([]);
+    const [refresh, setRefresh] = useState(true);
+
+    useEffect(() => {
+        if (refresh) {
+            actions.getTeamsRegister()
+                .then(data => setTeams(data))
+                .catch(error => console.error("Erro ao buscar as equipes:", error));
+        }
+    }, [refresh]);
 
     const handleEdit = (type, record) => {
         setEditRecord(record);
@@ -201,7 +212,7 @@ function TeamManagement() {
         {
             key: '3',
             label: 'Equipes',
-            children: createTabContent('team', teamData, setShowTeams),
+            children: createTabContent('name', teams, setShowTeams),
         },
     ];
 
@@ -224,6 +235,7 @@ function TeamManagement() {
             <ModalTeams
                 open={showTeams}
                 close={() => setShowTeams(false)}
+                setRefresh={setRefresh}
             />
             <ModalDelete
                 open={showDelete}
