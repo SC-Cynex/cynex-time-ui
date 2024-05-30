@@ -1,14 +1,51 @@
-import React from 'react';
-import { Form, Button, Input, Col, Row } from "antd";
+import React, { useState } from 'react';
+import { Form, Button, Input, Select, Col, Row } from "antd";
 import styles from "./Register.module.css";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
+import action_register from './action_register';
 
 export default function FormRegister() {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
+    const [addressFieldsDisabled, setAddressFieldsDisabled] = useState(true);
 
-    const handleSave = (values) => {
-        console.log('Form values:', values);
+    const onSearch = async (value) => {
+        try {
+            setLoading(true);
+            const addressData = await action_register.fetchAddress(value);
+            form.setFieldsValue({
+                city: addressData.city,
+                state: addressData.state,
+                neighborhood: addressData.neighborhood,
+                street: addressData.street,
+            });
+            setAddressFieldsDisabled(false);
+        } catch (error) {
+            console.error('Erro ao buscar endereço:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRegister = async (values) => {
+        try {
+            console.log('Form values:', values);
+            const addressData = await action_register.fetchAddress(values.cep);
+
+            // Setando os valores dos campos do endereço no formulário
+            form.setFieldsValue({
+                cidade: addressData.localidade,
+                estado: addressData.uf,
+                bairro: addressData.bairro,
+                rua: addressData.logradouro,
+            });
+
+            // Continuar com o registro do usuário
+            // action_register.registerUser(values);
+        } catch (error) {
+            console.error('Erro ao buscar endereço:', error);
+        }
     };
 
     return (
@@ -16,7 +53,7 @@ export default function FormRegister() {
             form={form}
             layout='vertical'
             style={{ width: '70vw' }}
-            onFinish={handleSave}
+            onFinish={handleRegister}
         >
             <div className={styles.general}>
                 <div className={styles.formTitle}>
@@ -34,6 +71,7 @@ export default function FormRegister() {
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
+                            hasFeedback
                         >
                             <Input size="large" />
                         </Form.Item>
@@ -49,6 +87,7 @@ export default function FormRegister() {
                                     message: "Email inválido!",
                                 },
                             ]}
+                            hasFeedback
                         >
                             <Input size="large" />
                         </Form.Item>
@@ -59,8 +98,9 @@ export default function FormRegister() {
                         <Form.Item
                             name="hour"
                             label="Horário"
+                            hasFeedback
                         >
-                            <Input size="large" />
+                            <Select size="large" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -71,8 +111,13 @@ export default function FormRegister() {
                                 {
                                     required: true,
                                     message: 'Campo não preenchido!',
-                                }
+                                },
+                                {
+                                    min: 6,
+                                    message: 'Mínimo 6 caracteres!',
+                                },
                             ]}
+                            hasFeedback
                         >
                             <Input.Password size="large" />
                         </Form.Item>
@@ -83,16 +128,18 @@ export default function FormRegister() {
                         <Form.Item
                             name="role"
                             label="Cargo"
+                            hasFeedback
                         >
-                            <Input size="large" />
+                            <Select size="large" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item
                             name="department"
                             label="Departamento"
+                            hasFeedback
                         >
-                            <Input size="large" />
+                            <Select size="large" />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -103,91 +150,98 @@ export default function FormRegister() {
                 <Row align="middle" gutter={20}>
                     <Col span={12}>
                         <Form.Item
-                            name="cidade"
-                            label="Cidade"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Campo não preenchido!',
-                                }
-                            ]}
-                        >
-                            <Input size="large" />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            name="estado"
-                            label="Estado"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Campo não preenchido!',
-                                }
-                            ]}
-                        >
-                            <Input size="large" />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row align="middle" gutter={20}>
-                    <Col span={12}>
-                        <Form.Item
                             name="cep"
                             label="CEP"
                             rules={[
                                 {
                                     required: true,
-                                    pattern: /^[0-9]{5}-[0-9]{3}$/,
-                                    message: 'CEP inválido!',
-                                }
+                                    min: 8,
+                                    message: 'Por favor, insira o CEP válido!',
+                                },
                             ]}
+                            hasFeedback
                         >
-                            <Input size="large" />
+                            <Input.Search
+                                allowClear
+                                onSearch={onSearch}
+                                loading={loading}
+                                size='large'
+                            />
                         </Form.Item>
+
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            name="rua"
-                            label="Rua"
+                            name="state"
+                            label="Estado"
                             rules={[
                                 {
-                                    required: true,
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
+                            hasFeedback
                         >
-                            <Input size="large" />
+                            <Input size="large" disabled={addressFieldsDisabled} />
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row align="middle" gutter={20}>
                     <Col span={12}>
                         <Form.Item
-                            name="bairro"
-                            label="Bairro"
+                            name="city"
+                            label="Cidade"
                             rules={[
                                 {
-                                    required: true,
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
+                            hasFeedback
                         >
-                            <Input size="large" />
+                            <Input size="large" disabled={addressFieldsDisabled} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            name="numero"
-                            label="Número"
+                            name="street"
+                            label="Rua"
                             rules={[
                                 {
-                                    required: true,
                                     message: 'Campo não preenchido!',
                                 }
                             ]}
+                            hasFeedback
                         >
-                            <Input size="large" />
+                            <Input size="large" disabled={addressFieldsDisabled} />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row align="middle" gutter={20}>
+                    <Col span={12}>
+                        <Form.Item
+                            name="neighborhood"
+                            label="Bairro"
+                            rules={[
+                                {
+                                    message: 'Campo não preenchido!',
+                                }
+                            ]}
+                            hasFeedback
+                        >
+                            <Input size="large" disabled={addressFieldsDisabled} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name="number"
+                            label="Número"
+                            rules={[
+                                {
+                                    message: 'Campo não preenchido!',
+                                }
+                            ]}
+                            hasFeedback
+                        >
+                            <Input size="large" disabled={addressFieldsDisabled} />
                         </Form.Item>
                     </Col>
                 </Row>
