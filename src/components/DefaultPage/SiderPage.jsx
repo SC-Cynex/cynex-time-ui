@@ -1,17 +1,9 @@
 import React, { useState } from "react";
 import styles from './SiderPage.module.css';
 import { Layout, Menu, Button, Divider } from "antd";
-import { FaUserCog } from "react-icons/fa";
+import { FaUserCog, FaUserClock, FaClock, FaAddressBook, FaUsers, FaUsersCog, FaUserPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
-import { FaUserClock } from "react-icons/fa";
-import { FaClock } from "react-icons/fa";
-import { FaAddressBook } from "react-icons/fa";
-import { FaUsers } from "react-icons/fa";
-
-
-import { FaUsersCog } from "react-icons/fa";
-import { FaUserPlus } from "react-icons/fa";
 
 const { Sider } = Layout;
 
@@ -27,16 +19,23 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("Registrar Ponto", "/point-register", <FaClock size={20}/>),
   getItem("Histórico", "/historic", <FaUserClock size={20}/>),
-  getItem("Incluir Membro", "/member-register", <FaUserPlus size={20}/>),
-  getItem("Gestão de Equipe", "/team-management", <FaUsersCog size={20}/>),
-  getItem("Equipe", "/team", <FaUsers size={20}/>),
-  getItem("Registrar Membro", "/register", <FaAddressBook  size={20}/>),
+  getItem("Equipe", "/team", <FaUsers size={20}/>, [
+    getItem("Equipe", "/team", <FaUsers size={20}/>),
+    getItem("Incluir Membro", "/member-register", <FaUserPlus size={20}/>),
+    getItem("Gestão de Equipe", "/team-management", <FaUsersCog size={20}/>),
+  ]),
+  getItem("Registrar Membro", "/register", <FaAddressBook size={20}/>),
   getItem("Configurações", "/settings", <FaUserCog size={20}/>)
 ];
 
 const SiderPage = () => {
   const [collapsed, setCollapsed] = useState(true);
   const navigate = useNavigate();
+
+  const handleMenuClick = (key) => {
+    navigate(key);
+  };
+
   return (
     <Sider
       style={{
@@ -59,12 +58,13 @@ const SiderPage = () => {
       </div>
       <Divider className={styles.divider}/>
       <Menu
-        onClick={({ key }) => {
-            navigate(key);
-        }}
+        onClick={({ key }) => handleMenuClick(key)}
         defaultSelectedKeys={[window.location.pathname]}
         mode="inline"
-        items={items}
+        items={items.map(item => ({
+          ...item,
+          onTitleClick: () => handleMenuClick(item.key),
+        }))}
         theme={"dark"}
       />
     </Sider>

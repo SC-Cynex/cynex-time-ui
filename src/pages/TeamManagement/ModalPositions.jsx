@@ -1,5 +1,6 @@
-import React from 'react';
-import { Form, Input, Select, Button, Modal } from "antd";
+import React, { useRef, useState } from 'react';
+import { Form, Input, Select, Modal } from "antd";
+import actions from './actions';
 
 const { Option } = Select;
 
@@ -9,44 +10,44 @@ const roleOptions = [
   { value: 'ADMIN', label: 'Admin' }
 ];
 
-export default function ModalPositions({ open, close }) {
+export default function ModalPositions({ open, close, setRefresh, message, status, enable }) {
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (values) => {
+  const handleCancel = () => {
+    form.resetFields();
+    close();
+  };
+
+  const handleOk = async () => {
     try {
-      const response = await fetch('http://localhost:3000/role', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      if (response.ok) {
-        // Handle success
-        console.log('Success:', response);
-        close(); // Close the modal on success
-      } else {
-        // Handle error
-        console.error('Error:', response);
-      }
+      const values = await form.validateFields();
+      const { name, accessLevel } = values;
+
+      setIsLoading(true);
+      setRefresh(false);
+      await actions.setRoleRegister(name, accessLevel, message, status, enable, setIsLoading);
+      setRefresh(true);
+      setIsLoading(false);
+      handleCancel();
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Erro ao registrar cargo", error);
     }
   };
 
   return (
     <Modal
-      visible={open}
-      onCancel={close}
+      open={open}
+      onOk={handleOk}
+      onCancel={handleCancel}
       title={"Registrar"}
       okText={"Adicionar"}
       cancelText={"Cancelar"}
-      onOk={() => form.submit()}
+      confirmLoading={isLoading}
     >
       <Form
         form={form}
         layout='vertical'
-        onFinish={handleSubmit}
       >
         <Form.Item
           name={'name'}

@@ -8,21 +8,35 @@ import ModalPositions from "./ModalPositions";
 import ModalTeams from "./ModalTeams";
 import ModalDelete from "./ModalDelete";
 import actions from './actions';
+import CTMessage from "../../components/CTMessage/CTMessage";
 
-function TeamManagement() {
+export default function TeamManagement() {
     const [showWorkedHours, setShowWorkedHours] = useState(false);
     const [showPositions, setShowPositions] = useState(false);
     const [showTeams, setShowTeams] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [editRecord, setEditRecord] = useState(null);
     const [editType, setEditType] = useState(null);
-    const [teamsData, setTeamsData] = useState([]);
     const [refresh, setRefresh] = useState(true);
+    const [status, setStatus] = useState(null);
+    const [enable, setEnable] = useState(false);
+    const [message, setMessage] = useState('');
+    const [teamsData, setTeamsData] = useState([]);
+    const [positionsData, setPositionsData] = useState([]);
 
     useEffect(() => {
         if (refresh) {
             actions.getTeamsRegister()
                 .then(data => setTeamsData(data))
+                .catch(error => console.error("Erro ao buscar as equipes:", error));
+        }
+    }, [refresh]);
+
+
+    useEffect(() => {
+        if (refresh) {
+            actions.getRoleRegister()
+                .then(data => setPositionsData(data))
                 .catch(error => console.error("Erro ao buscar as equipes:", error));
         }
     }, [refresh]);
@@ -45,11 +59,11 @@ function TeamManagement() {
         setShowDelete(true);
     };
 
-    const generateColumns = (type) => [
+    const generateColumns = (type, column) => [
         {
             title: type === 'workedHours' ? 'Horário de Trabalho' : type === 'positions' ? 'Cargo de Trabalho' : 'Equipe',
-            dataIndex: type,
-            key: type,
+            dataIndex: column,
+            key: column,
         },
         {
             title: 'Ações',
@@ -68,7 +82,7 @@ function TeamManagement() {
         },
     ];
 
-    const createTabContent = (type, dataSource, modalSetter) => (
+    const createTabContent = (type, dataSource, modalSetter, column) => (
         <div>
             <Button type="primary" onClick={() => {
                 setEditRecord(null);
@@ -77,39 +91,32 @@ function TeamManagement() {
             }}>
                 {`Adicionar ${type === 'workedHours' ? 'Horário' : type === 'positions' ? 'Cargos' : 'Equipe'}`}
             </Button>
-            <Table columns={generateColumns(type)} dataSource={dataSource} style={{ marginTop: '40px' }} />
+
+            {enable && (
+                <div className={styles.feedback}>
+                    <CTMessage message={message} type={status} enable={setEnable} />
+                </div>
+            )}
+
+            <Table columns={generateColumns(type, column)} dataSource={dataSource} style={{ marginTop: '20px' }} />
         </div>
     );
-    const [positionsData, setPositionsData] = useState([]);
-
-    useEffect(() => {
-        // Fetch positions data
-        fetch('http://localhost:3000/role')
-            .then(response => response.json())
-            .then(data => {
-                const filteredData = data.filter(position => 
-                    !['EMPLOYEE', 'MANAGER', 'ADMIN'].includes(position.name)
-                );
-                setPositionsData(filteredData);
-            })
-            .catch(error => console.error('Error fetching positions:', error));
-    }, []);
 
     const items = [
         {
             key: '1',
             label: 'Horários de trabalho',
-            children: createTabContent('workedHours', workedHoursData, setShowWorkedHours),
+            children: createTabContent('workedHours', workedHoursData, setShowWorkedHours, 'name'),
         },
         {
             key: '2',
             label: 'Cargos',
-            children: createTabContent('positions', positionsData, setShowPositions),
+            children: createTabContent('positions', positionsData, setShowPositions, 'name'),
         },
         {
             key: '3',
             label: 'Equipes',
-            children: createTabContent('name', teamsData, setShowTeams),
+            children: createTabContent('team', teamsData, setShowTeams, 'name'),
         },
     ];
 
@@ -128,11 +135,18 @@ function TeamManagement() {
             <ModalPositions
                 open={showPositions}
                 close={() => setShowPositions(false)}
+                setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
             />
             <ModalTeams
                 open={showTeams}
                 close={() => setShowTeams(false)}
                 setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
             />
             <ModalDelete
                 open={showDelete}
@@ -142,5 +156,3 @@ function TeamManagement() {
         </DefaultPage>
     );
 }
-
-export default TeamManagement

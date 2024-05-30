@@ -1,40 +1,31 @@
-import React, { useRef, useState } from 'react';
-import { Input, Modal, message as antdMessage } from "antd";
+import React, { useState } from 'react';
+import { Form, Input, Modal } from "antd";
 import actions from './actions';
 
-export default function ModalTeams({ open, close, setRefresh }) {
-    const formRef = useRef(null);
+export default function ModalTeams({ open, close, setRefresh, message, status, enable }) {
+    const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false);
-    const [status, setStatus] = useState(null);
-    const [enable, setEnable] = useState(false);
-    const [message, setMessage] = useState('');
-
 
     const handleCancel = () => {
-        if (formRef.current) {
-            formRef.current.reset();
-        }
+        form.resetFields();
         close();
     };
 
     const handleOk = async () => {
-        if (formRef.current) {
-            const formData = new FormData(formRef.current);
-            const name = formData.get('name');
+        try {
+            const values = await form.validateFields();
+            const { name } = values;
 
-            try {
-                setRefresh(false);
-                await actions.setTeamRegister(name, setMessage, setStatus, setEnable, setIsLoading);
-                setRefresh(true);
-                antdMessage.success("Registro adicionado com sucesso!");
-                handleCancel();
-            } catch (error) {
-                antdMessage.error("Erro ao registrar equipe");
-            }
+            setIsLoading(true);
+            setRefresh(false);
+            await actions.setTeamRegister(name, message, status, enable, setIsLoading);
+            setRefresh(true);
+            setIsLoading(false);
+            handleCancel();
+        } catch (error) {
+            console.error("Erro ao registrar equipe", error);
         }
     };
-
-
 
     return (
         <Modal
@@ -46,12 +37,23 @@ export default function ModalTeams({ open, close, setRefresh }) {
             cancelText="Cancelar"
             confirmLoading={isLoading}
         >
-            <form ref={formRef}>
-                <div className="form-item">
-                    <label htmlFor="name">Equipe</label>
-                    <Input id="name" name="name" size="large" required />
-                </div>
-            </form>
+            <Form
+                form={form}
+                layout='vertical'
+            >
+                <Form.Item
+                    name="name"
+                    label="Equipe"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Campo não preenchido!',
+                        }
+                    ]}
+                >
+                    <Input size="large" />
+                </Form.Item>
+            </Form>
         </Modal>
     );
 }

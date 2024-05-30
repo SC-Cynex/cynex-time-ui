@@ -1,8 +1,10 @@
 import React from 'react';
-import { Form, Input, Select } from "antd";
+import { Form, Input, TimePicker } from "antd";
 import CTModal from "../../components/CTModal/CTModal";
 
 export default function ModalWorkedHours({ open, close }) {
+    const [form] = Form.useForm();
+    
     return (
         <div>
             <CTModal
@@ -12,10 +14,10 @@ export default function ModalWorkedHours({ open, close }) {
                 btnTitleOk={"Adicionar"}
                 btnTitleCancel={"Cancelar"}
             >
-                <Form action="" method="post" layout='vertical'>
+                <Form form={form} layout='vertical'>
                     <Form.Item
-                        name={'horario'}
-                        label={'Horário'}
+                        name={'start'}
+                        label={'Horário de Entrada'}
                         rules={[
                             {
                                 required: true,
@@ -23,7 +25,31 @@ export default function ModalWorkedHours({ open, close }) {
                             }
                         ]}
                     >
-                        <Input size={'large'} />
+                        <TimePicker  />
+                    </Form.Item>
+                    <Form.Item
+                        name={'end'}
+                        label={'Horário de Saída'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Campo não preenchido!',
+                            }
+                        ]}
+                    >
+                        <TimePicker  />
+                    </Form.Item>
+                    <Form.Item
+                        name={'lunchTime'}
+                        label={'Tempo de Almoço'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Campo não preenchido!',
+                            }
+                        ]}
+                    >
+                        <TimePicker  />
                     </Form.Item>
                 </Form>
             </CTModal>
