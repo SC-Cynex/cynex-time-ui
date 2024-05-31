@@ -3,8 +3,8 @@ export default {
   setTeamRegister: async (name, setMessage, setStatus, setEnable, setIsLoading) => {
     setIsLoading(true);
     try {
-      var userId = parseInt(localStorage.getItem("id"));
-      var register = {
+      const userId = parseInt(localStorage.getItem("id"));
+      const register = {
         name: name,
         leaderId: userId,
       };
@@ -54,7 +54,7 @@ export default {
   setRoleRegister: async (name, accessLevel, setMessage, setStatus, setEnable, setIsLoading) => {
     setIsLoading(true);
     try {
-      var register = {
+      const register = {
         name: name,
         accessLevel: accessLevel,
       };
@@ -104,7 +104,7 @@ export default {
   setHourRegister: async (start, end, lunchTime, setMessage, setStatus, setEnable, setIsLoading) => {
     setIsLoading(true);
     try {
-      var register = {
+      const register = {
         start: start,
         end: end,
         lunchTime: lunchTime
@@ -155,7 +155,7 @@ export default {
   setDepartmentsRegister: async (name, setMessage, setStatus, setEnable, setIsLoading) => {
     setIsLoading(true);
     try {
-      var register = {
+      const register = {
         name: name
       };
 

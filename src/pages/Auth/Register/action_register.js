@@ -1,5 +1,6 @@
 export default {
-  registerUser: async (values) => {
+  registerUser: async (values, setIsLoading) => {
+    setIsLoading(true);
     try {
       // Registrar o endereço
       const dataAddress = {
@@ -28,7 +29,7 @@ export default {
 
       const userData = {
         name: values.name,
-        email: values.name,
+        email: values.email,
         password: values.password,
         roleId: values.role,
         hourId: values.hour,
@@ -48,9 +49,11 @@ export default {
         throw new Error("Erro ao registrar o usuário!");
       }
 
+      setIsLoading(false);
       return await userResponse.json();
     } catch (error) {
       console.error("Erro no registro de usuário:", error);
+      setIsLoading(false);
       throw error;
     }
   },
@@ -111,4 +114,24 @@ export default {
       throw error;
     }
   },
+
+  getDepartments : async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/department`, {
+        method: "GET",
+      }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os departamentos");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar os departamentos:", error);
+      throw error;
+    }
+  }
 };
