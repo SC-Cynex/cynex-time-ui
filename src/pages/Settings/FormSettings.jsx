@@ -1,18 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Input, Col, Row, Divider } from "antd";
-import styles from "./FormSettings.module.css";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaUserAlt } from "react-icons/fa";
+import { Form, Button, Input, Col, Row } from "antd";
+import { FaMapMarkerAlt, FaUserAlt } from "react-icons/fa"; // Use an alternative icon for the location
 import actions_settings from './actions_settings';
+import styles from "./FormSettings.module.css";
 
 export default function FormSettings() {
     const [form] = Form.useForm();
     const [isEditing, setIsEditing] = useState(false);
 
+    const setFormValues = (data) => {
+        form.setFieldsValue({
+            name: data.name,
+            email: data.email,
+            hour: `${data.hour.start} - ${data.hour.end}`,
+            password: '',
+            role: data.Role.name,
+            department: data.Department.name,
+            city: data.address.city,
+            state: data.address.state,
+            zipCode: data.address.zipCode,
+            street: data.address.street,
+            neighborhood: data.address.neighborhood,
+            number: data.address.number
+        });
+    };
+
     useEffect(() => {
         actions_settings.getUserById().then((data) => {
-            form.setFieldsValue(data);
-            console.log(data);
+            setFormValues(data);
         });
     }, [form]);
 
@@ -23,20 +38,17 @@ export default function FormSettings() {
     const handleCancel = () => {
         setIsEditing(false);
         actions_settings.getUserById().then((data) => {
-            form.setFieldsValue(data);
+            setFormValues(data);
         });
     };
 
     const handleSave = (values) => {
-        console.log('Form values:', values);
         setIsEditing(false);
     };
 
     return (
         <Form
             form={form}
-            action=""
-            method="post"
             layout='vertical'
             style={{ width: '70vw' }}
             onFinish={handleSave}
@@ -54,7 +66,7 @@ export default function FormSettings() {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Campo não preenchido!',
+                                    message: 'Campo é obrigatório!',
                                 }
                             ]}
                         >
@@ -69,7 +81,7 @@ export default function FormSettings() {
                                 {
                                     required: true,
                                     type: "email",
-                                    message: "Campo não preenchido!",
+                                    message: "Campo é obrigatório!",
                                     whitespace: true,
                                 },
                             ]}
@@ -79,25 +91,15 @@ export default function FormSettings() {
                     </Col>
                 </Row>
                 <Row align="middle" gutter={20}>
-                    <Col span={12}>
+                    <Col span={8}>
                         <Form.Item
                             name="hour"
-                            label="Horário"
+                            label="Horário de Trabalho"
                         >
                             <Input size="large" disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            name="password"
-                            label="Senha"
-                        >
-                            <Input.Password size="large" disabled />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row align="middle" gutter={20}>
-                    <Col span={12}>
+                    <Col span={8}>
                         <Form.Item
                             name="role"
                             label="Cargo"
@@ -105,7 +107,7 @@ export default function FormSettings() {
                             <Input size="large" disabled />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         <Form.Item
                             name="department"
                             label="Departamento"
@@ -115,18 +117,18 @@ export default function FormSettings() {
                     </Col>
                 </Row>
                 <div className={styles.formTitle}>
-                    <FaLocationDot size={30} color='#193f6d' />
+                    <FaMapMarkerAlt size={30} color='#193f6d' />
                     <h2 style={{ color: '#193f6d' }}>Endereço</h2>
                 </div>
                 <Row align="middle" gutter={20}>
                     <Col span={12}>
                         <Form.Item
-                            name="cidade"
+                            name="city"
                             label="Cidade"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Campo não preenchido!',
+                                    message: 'Campo é obrigatório!',
                                 }
                             ]}
                         >
@@ -135,12 +137,12 @@ export default function FormSettings() {
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            name="estado"
+                            name="state"
                             label="Estado"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Campo não preenchido!',
+                                    message: 'Campo é obrigatório!',
                                 }
                             ]}
                         >
@@ -151,12 +153,12 @@ export default function FormSettings() {
                 <Row align="middle" gutter={20}>
                     <Col span={12}>
                         <Form.Item
-                            name="cep"
+                            name="zipCode"
                             label="CEP"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Campo não preenchido!',
+                                    message: 'Campo é obrigatório!',
                                 }
                             ]}
                         >
@@ -165,12 +167,12 @@ export default function FormSettings() {
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            name="rua"
+                            name="street"
                             label="Rua"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Campo não preenchido!',
+                                    message: 'Campo é obrigatório!',
                                 }
                             ]}
                         >
@@ -181,12 +183,12 @@ export default function FormSettings() {
                 <Row align="middle" gutter={20}>
                     <Col span={12}>
                         <Form.Item
-                            name="bairro"
+                            name="neighborhood"
                             label="Bairro"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Campo não preenchido!',
+                                    message: 'Campo é obrigatório!',
                                 }
                             ]}
                         >
@@ -195,12 +197,12 @@ export default function FormSettings() {
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            name="numero"
+                            name="number"
                             label="Número"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Campo não preenchido!',
+                                    message: 'Campo é obrigatório!',
                                 }
                             ]}
                         >
@@ -216,11 +218,11 @@ export default function FormSettings() {
                             <Button type="primary" htmlType="submit" block size="large">Salvar</Button>
                         </Col>
                         <Col span={12}>
-                            <Button block size="large" onClick={handleCancel}>Cancelar</Button>
+                            <Button block size="large" onClick={handleCancel}>Cancel</Button>
                         </Col>
                     </Row>
                 ) : (
-                    <Button type="primary" block size="large" onClick={handleEdit}>Alterar Cadastro</Button>
+                    <Button type="primary" block size="large" onClick={handleEdit}>Editar</Button>
                 )}
             </Form.Item>
         </Form>

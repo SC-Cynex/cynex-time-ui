@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Input, Select, Col, Row } from "antd";
 import styles from "./Register.module.css";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaUserAlt } from "react-icons/fa";
+import { FaUserAlt, FaMapMarkerAlt } from "react-icons/fa";
 import action_register from './action_register';
 import CTMessage from '../../../components/CTMessage/CTMessage';
 
@@ -29,6 +28,7 @@ export default function FormRegister() {
 
         action_register.getDepartments().then((data) => {
             setDepartment(data);
+            console.log(data);
         });
     }, []);
 
@@ -153,7 +153,7 @@ export default function FormRegister() {
                         </Col>
                     </Row>
                     <div className={styles.formTitle}>
-                        <FaLocationDot size={30} color='#193f6d' />
+                        <FaMapMarkerAlt size={30} color='#193f6d' />
                         <h2 style={{ color: '#193f6d' }}>Endereço</h2>
                     </div>
                     <Row align="middle" gutter={20}>

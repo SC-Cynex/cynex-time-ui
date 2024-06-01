@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Collapse, Space, Avatar, Dropdown, Row, Col, Tooltip } from "antd";
 import members from "../../utils/members";
@@ -14,6 +14,15 @@ import { FaUsersRectangle } from "react-icons/fa6";
 import styles from "./Team.module.css";
 
 export default function Team() {
+
+  const [listTeam, setListTeam] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/user/team/${3}`)
+    .then(response => response.json())
+    .then(data => console.log(data));
+  }, [])
+
   const memberInfo = (position, workload, compTime) => {
     const listPoint = actions.getPointRegister();
 

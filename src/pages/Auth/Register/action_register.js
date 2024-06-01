@@ -35,8 +35,10 @@ export default {
         hourId: values.hour,
         teamId: values.team,
         addressId: addressId,
+        departmentId: values.department,
       };
 
+      
       const userResponse = await fetch("http://localhost:3000/user/register", {
         method: "POST",
         headers: {
@@ -44,12 +46,9 @@ export default {
         },
         body: JSON.stringify(userData),
       });
-
-      if (!userResponse.ok) {
-        throw new Error("Erro ao registrar o usuário!");
-      }
-
+      
       setIsLoading(false);
+
       return await userResponse.json();
     } catch (error) {
       console.error("Erro no registro de usuário:", error);
@@ -115,13 +114,11 @@ export default {
     }
   },
 
-  getDepartments : async () => {
+  getDepartments: async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/department`, {
+      const response = await fetch(`http://localhost:3000/department`, {
         method: "GET",
-      }
-      );
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao buscar os departamentos");
@@ -133,5 +130,5 @@ export default {
       console.error("Erro ao buscar os departamentos:", error);
       throw error;
     }
-  }
+  },
 };
