@@ -1,45 +1,40 @@
-# CynexTime
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://www.svgrepo.com/show/452092/react.svg" width="200" alt="Nest Logo" /></a>
+</p>
 
-## 🧠 Visão Geral
+# 🧠 Visão Geral
 
 Bem-vindo ao CynexTime, um sistema de gerenciamento de ponto eletrônico que simplifica o registro e controle de horas trabalhadas. Desenvolvido com o objetivo de oferecer uma solução eficiente e intuitiva, o CynexTime permite que os usuários registrem suas horas trabalhadas, efetuem alterações quando necessário e justifiquem eventuais ajustes.
 
 Além disso, o sistema oferece acesso a administradores, que têm controle total sobre as principais ações do sistema, e a gestores, previamente cadastrados pelos administradores, que gerenciam suas respectivas equipes de forma eficaz.
 
-## 📃 Funcionalidades Principais 
+# Passo a Passo para Rodar a Aplicação React
 
-- **Registro de Ponto:**
-  - Os usuários podem facilmente registrar suas horas trabalhadas de forma rápida e precisa.
-  
-- **Gerenciamento de Horas:**
-  - Os usuários têm a capacidade de realizar alterações em seus registros de ponto, quando necessário.
-  
-- **Justificativa de Horas:**
-  - Os usuários podem justificar eventuais alterações feitas em seus registros, fornecendo explicações para que seu gestor aceite.
+## Pré-requisitos
 
-- **Controle de Acesso:**
-  - Os administradores têm controle total sobre as permissões de acesso, garantindo a segurança e privacidade dos dados.
-  
-- **Gestão de Equipes:**
-  - Os gestores têm acesso aos registros de ponto de suas equipes, facilitando a supervisão e gestão eficaz do tempo de trabalho e aceitando justificativas.
+1. **Node.js** e **npm** instalados.
 
-## 🌐 Tecnologias Utilizadas
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![MySQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
+## Instruções
 
+### 1. Clonar o repositório
 
+```bash
+git clone https://github.com/SC-Cynex/cynex-time-ui.git
+```
+```bash
+cd cynex-time-ui
+```
 
-- **Frontend:**
-  - HTML5, CSS3, JavaScript
-  - Framework: React.js
-  
-- **Backend:**
-  - Linguagem de Programação: NODE
-  
-- **Banco de Dados:**
-  - MySQL
-  
-- **Hospedagem:**
-  - Serviços de Cloud Computing (AWS)
+### 2. Instalar dependências
+```bash
+npm install
+```
+### 3. Rodar aplicação
+```bash
+npm run dev
+```
+### 4. Acessar a aplicação
+- Abra o navegador e vá para http://localhost:5173
 
 ## Contato
 
