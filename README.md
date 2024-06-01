@@ -36,7 +36,7 @@ npm run dev
 ### 4. Acessar a aplicação
 - Abra o navegador e vá para http://localhost:5173
 
-## Contato
+## Desenvolvedores
 
 <table align="center">
   <tr>
