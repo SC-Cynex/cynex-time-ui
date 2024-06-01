@@ -32,6 +32,7 @@ export default function TeamManagement() {
             actions.getTeamsRegister()
                 .then(data => setTeamsData(data))
                 .catch(error => console.error("Erro ao buscar as equipes:", error));
+            setRefresh(false);
         }
     }, [refresh]);
 
@@ -40,6 +41,7 @@ export default function TeamManagement() {
             actions.getRoleRegister()
                 .then(data => setPositionsData(data))
                 .catch(error => console.error("Erro ao buscar os cargos:", error));
+            setRefresh(false);
         }
     }, [refresh]);
 
@@ -54,6 +56,7 @@ export default function TeamManagement() {
                     setWorkedHoursData(newData);
                 })
                 .catch(error => console.error("Erro ao buscar os horários:", error));
+            setRefresh(false);
         }
     }, [refresh]);
 
@@ -62,6 +65,7 @@ export default function TeamManagement() {
             actions.getDepartments()
                 .then(data => setDepartmentsData(data))
                 .catch(error => console.error("Erro ao buscar os departamentos:", error));
+            setRefresh(false);
         }
     }, [refresh]);
 
@@ -208,53 +212,58 @@ export default function TeamManagement() {
             label: 'Departamento',
             children: createTabContent('department', departmentsData, setShowDepartments, 'name'),
         }
-        ];
+    ];
 
-        return (
-            <DefaultPage>
-                <div className={styles.team}>
-                    <h1>Gestão de Equipe</h1>
-                    <div className={styles.collapse}>
-                        <Tabs defaultActiveKey="1" items={items} onChange={resetMessage} />
-                    </div>
+    return (
+        <DefaultPage>
+            <div className={styles.team}>
+                <h1>Gestão de Equipe</h1>
+                <div className={styles.collapse}>
+                    <Tabs defaultActiveKey="1" items={items} onChange={resetMessage} />
                 </div>
-                <ModalWorkedHours
-                    open={showWorkedHours}
-                    close={() => setShowWorkedHours(false)}
-                    setRefresh={setRefresh}
-                    message={setMessage}
-                    status={setStatus}
-                    enable={setEnable}
-                />
-                <ModalPositions
-                    open={showPositions}
-                    close={() => setShowPositions(false)}
-                    setRefresh={setRefresh}
-                    message={setMessage}
-                    status={setStatus}
-                    enable={setEnable}
-                />
-                <ModalTeams
-                    open={showTeams}
-                    close={() => setShowTeams(false)}
-                    setRefresh={setRefresh}
-                    message={setMessage}
-                    status={setStatus}
-                    enable={setEnable}
-                />
-                <ModalDepartment
-                    open={showDepartments}
-                    close={() => setShowDepartments(false)}
-                    setRefresh={setRefresh}
-                    message={setMessage}
-                    status={setStatus}
-                    enable={setEnable}
-                />
-                <ModalDelete
-                    open={showDelete}
-                    close={() => setShowDelete(false)}
-                    type={editType}
-                />
-            </DefaultPage>
-        );
-    }
+            </div>
+            <ModalWorkedHours
+                open={showWorkedHours}
+                close={() => setShowWorkedHours(false)}
+                setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
+            />
+            <ModalPositions
+                open={showPositions}
+                close={() => setShowPositions(false)}
+                setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
+            />
+            <ModalTeams
+                open={showTeams}
+                close={() => setShowTeams(false)}
+                setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
+            />
+            <ModalDepartment
+                open={showDepartments}
+                close={() => setShowDepartments(false)}
+                setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
+            />
+            <ModalDelete
+                open={showDelete}
+                close={() => setShowDelete(false)}
+                type={editType}
+                record={editRecord}
+                setRefresh={setRefresh}
+                message={setMessage}
+                status={setStatus}
+                enable={setEnable}
+            />
+        </DefaultPage>
+    );
+}

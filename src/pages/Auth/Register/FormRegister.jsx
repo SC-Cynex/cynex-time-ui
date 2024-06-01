@@ -227,14 +227,14 @@ export default function FormRegister() {
                         </Col>
                     </Row>
                 </div>
-                <Form.Item>
-                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large">Registrar</Button>
-                </Form.Item>
                 {enable && (
                     <div style={{ marginBottom: '20px' }}>
                         <CTMessage message={message} type={status} enable={setEnable} />
                     </div>
                 )}
+                <Form.Item>
+                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large">Registrar</Button>
+                </Form.Item>
             </Form>
         </>
     );
