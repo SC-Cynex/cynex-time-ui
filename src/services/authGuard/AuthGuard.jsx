@@ -1,4 +1,3 @@
-// AuthGuard.jsx
 import React, { useEffect, useState } from 'react';
 import AuthService from './AuthService';
 import Login from '../../pages/Auth/Login/Login';

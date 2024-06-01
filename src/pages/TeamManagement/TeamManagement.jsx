@@ -222,39 +222,39 @@ export default function TeamManagement() {
                     <Tabs defaultActiveKey="1" items={items} onChange={resetMessage} />
                 </div>
             </div>
-            <ModalWorkedHours
+            {showWorkedHours && <ModalWorkedHours
                 open={showWorkedHours}
                 close={() => setShowWorkedHours(false)}
                 setRefresh={setRefresh}
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
-            />
-            <ModalPositions
+            />}
+            {showPositions && <ModalPositions
                 open={showPositions}
                 close={() => setShowPositions(false)}
                 setRefresh={setRefresh}
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
-            />
-            <ModalTeams
+            />}
+            {showTeams && <ModalTeams
                 open={showTeams}
                 close={() => setShowTeams(false)}
                 setRefresh={setRefresh}
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
-            />
-            <ModalDepartment
+            />}
+            {showDepartments && <ModalDepartment
                 open={showDepartments}
                 close={() => setShowDepartments(false)}
                 setRefresh={setRefresh}
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
-            />
-            <ModalDelete
+            />}
+            {showDelete && <ModalDelete
                 open={showDelete}
                 close={() => setShowDelete(false)}
                 type={editType}
@@ -263,7 +263,7 @@ export default function TeamManagement() {
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
-            />
+            />}
         </DefaultPage>
     );
 }

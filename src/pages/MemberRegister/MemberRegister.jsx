@@ -5,14 +5,21 @@ import members from "../../utils/members";
 import actions from "../PointRegister/actions";
 import {
   UserOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  BellOutlined,
   PlusCircleFilled
 } from "@ant-design/icons";
 import { FaUsersRectangle } from "react-icons/fa6";
 import styles from "./MemberRegister.module.css";
 import ModalRegister from "./ModalRegister";
+import ModalDelete from "./ModalDelete";
+import ModalEdit from "./ModalEdit";
 
 export default function MemberRegister() {
   const [showRegister, setShowRegister] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const memberInfo = (position, workload, compTime) => {
     const listPoint = actions.getPointRegister();
@@ -55,10 +62,49 @@ export default function MemberRegister() {
     );
   };
 
+  const genExtra = (name) => (
+    <div>
+      <Tooltip title={`Você tem marcações de ${name} para aprovar`}>
+        <span style={{ marginRight: '10px' }}>
+          <BellOutlined 
+            style={{ fontSize: '20px' }} 
+            onClick={(event) => {
+              event.stopPropagation();
+            }}  
+          />
+        </span>
+      </Tooltip>
+
+      <Tooltip title={'Editar membro'}>
+        <span style={{ marginRight: '10px' }}>
+          <EditOutlined 
+            style={{ fontSize: '20px' }} 
+            onClick={(event) => {
+              event.stopPropagation();
+              setShowEdit(true);
+            }}  
+          />
+        </span>
+      </Tooltip>
+
+      <Tooltip title={'Remover membro da equipe'}>
+        <span style={{ marginRight: '10px' }}>
+          <DeleteOutlined 
+            style={{ fontSize: '20px' }} 
+            onClick={(event) => {
+              event.stopPropagation();
+              setShowDelete(true); 
+            }}  
+          />
+        </span>
+      </Tooltip>
+    </div>
+  );
+
   return (
     <DefaultPage>
       <div className={styles.team}>
-        <h1>Registrar Membro</h1>
+        <h1>Equipe</h1>
         <div className={styles.collapse}>
           <ConfigProvider
             theme={{
@@ -107,6 +153,7 @@ export default function MemberRegister() {
                     member.workload,
                     member.compTime
                   ),
+                  extra: genExtra(member.name),
                 },
               ]}
               expandIconPosition={"end"}
@@ -115,10 +162,18 @@ export default function MemberRegister() {
             />
           ))}
         </div>
-        <ModalRegister
+        {showRegister && <ModalRegister
           open={showRegister}
           close={() => setShowRegister(false)}
-        />
+        />}
+        {showDelete && <ModalDelete
+          open={showDelete}
+          close={() => setShowDelete(false)}
+        />}
+        {showEdit && <ModalEdit
+          open={showEdit}
+          close={() => setShowEdit(false)}
+        />}
       </div>
     </DefaultPage>
   );

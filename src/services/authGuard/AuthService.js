@@ -1,4 +1,3 @@
-// AuthService.js
 const AuthService = {
   isAuthenticated: async () => {
     const getCookie = (name) => {

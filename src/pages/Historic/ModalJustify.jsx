@@ -3,7 +3,23 @@ import { Form, Input, Row, Select } from "antd";
 const { TextArea } = Input;
 import CTModal from "../../components/CTModal/CTModal";
 
-export default function ModalJustify({ open, close }) {
+export default function ModalJustify({ open, close, record }) {
+    const [form] = Form.useForm();
+
+    React.useEffect(() => {
+        if (record) {
+            form.setFieldsValue({
+                marking: record.date,
+                hours: [
+                    record.marking1.hour,
+                    record.marking2.hour,
+                    record.marking3.hour,
+                    record.marking4.hour,
+                ],
+            });
+        }
+    }, [record, form]);
+
     return (
         <div>
             <CTModal
@@ -13,9 +29,9 @@ export default function ModalJustify({ open, close }) {
                 btnTitleOk={"Adicionar"}
                 btnTitleCancel={"Cancelar"}
             >
-                <Form action="" method="post" layout='vertical'>
+                <Form form={form} action="" method="post" layout='vertical'>
                     <Form.Item
-                        name={'marcacao'}
+                        name={'marking'}
                         label={'Marcação'}
                         rules={[
                             {
@@ -24,39 +40,44 @@ export default function ModalJustify({ open, close }) {
                             }
                         ]}
                     >
-                        <Input size={'large'} />
+                        <Input size={'large'} disabled />
                     </Form.Item>
                     <Form.Item
-                        name="horario"
+                        name="hours"
                         label={'Horário'}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Campo não preenchido!',
-                            },
-                        ]}
                     >
                         <Row align={'space-between'}>
-                            <Input style={{ width: '22%' }} size={'large'} />
-                            <Input style={{ width: '22%' }} size={'large'} />
-                            <Input style={{ width: '22%' }} size={'large'} />
-                            <Input style={{ width: '22%' }} size={'large'} />
+                            <>
+                                <Input
+                                    style={{ width: '22%', color: record.marking1.isValid ? 'black' : 'red' }}
+                                    size={'large'}
+                                    value={record.marking1.hour}
+                                    readOnly
+                                />
+                                <Input
+                                    style={{ width: '22%', color: record.marking2.isValid ? 'black' : 'red' }}
+                                    size={'large'}
+                                    value={record.marking2.hour}
+                                    readOnly
+                                />
+                                <Input
+                                    style={{ width: '22%', color: record.marking3.isValid ? 'black' : 'red' }}
+                                    size={'large'}
+                                    value={record.marking3.hour}
+                                    readOnly
+                                />
+                                <Input
+                                    style={{ width: '22%', color: record.marking4.isValid ? 'black' : 'red' }}
+                                    size={'large'}
+                                    value={record.marking4.hour}
+                                    readOnly
+                                />
+                            </>
+
                         </Row>
                     </Form.Item>
                     <Form.Item
-                        name="tipoJustificativa"
-                        label={'Tipo de Justificativa'}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Campo não preenchido!',
-                            },
-                        ]}
-                    >
-                        <Select size={'large'} />
-                    </Form.Item>
-                    <Form.Item
-                        name="justificativa"
+                        name="justify"
                         label={'Justificativa'}
                         rules={[
                             {
@@ -70,5 +91,6 @@ export default function ModalJustify({ open, close }) {
                 </Form>
             </CTModal>
         </div>
-    )
+    );
 }
+

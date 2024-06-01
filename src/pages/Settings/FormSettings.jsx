@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Input, Col, Row } from "antd";
-import { FaMapMarkerAlt, FaUserAlt } from "react-icons/fa"; // Use an alternative icon for the location
+import { FaMapMarkerAlt, FaUserAlt } from "react-icons/fa";
 import actions_settings from './actions_settings';
 import styles from "./FormSettings.module.css";
 

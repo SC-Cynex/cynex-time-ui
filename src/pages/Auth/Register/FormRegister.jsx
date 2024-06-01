@@ -44,6 +44,9 @@ export default function FormRegister() {
             });
             setAddressFieldsDisabled(false);
         } catch (error) {
+            setMessage('Erro ao buscar endereço:');
+            setStatus('success');
+            setEnable(true);
             console.error('Erro ao buscar endereço:', error);
         } finally {
             setLoading(false);
