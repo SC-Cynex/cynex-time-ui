@@ -68,9 +68,6 @@ export default function Login() {
               Entrar
             </Button>
           </Form.Item>
-          <a href="/redefine-password" style={{ textAlign: "center" }}>
-            Esqueceu sua senha?
-          </a>
         </Form>
         {
           enable && 

@@ -1,5 +1,4 @@
 import Login from "../pages/Auth/Login/Login";
-import RedefinePassword from "../pages/Auth/RedefinePassword/RedefinePassword";
 import Register from "../pages/Auth/Register/Register";
 import Historic from "../pages/Historic/Historic";
 import MemberRegister from "../pages/MemberRegister/MemberRegister";
@@ -21,11 +20,6 @@ const routes = [
   {
     path: "/historic",
     component: Historic,
-    requiresAuth: true,
-  },
-  {
-    path: "/redefine-password",
-    component: RedefinePassword,
     requiresAuth: true,
   },
   {
