@@ -170,7 +170,6 @@ export default function TeamManagement() {
         return columns;
     };
 
-
     const createTabContent = (type, dataSource, modalSetter, column) => (
         <div>
             <Button type="primary" onClick={() => {
@@ -229,6 +228,7 @@ export default function TeamManagement() {
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
+                record={editRecord}
             />}
             {showPositions && <ModalPositions
                 open={showPositions}
@@ -237,6 +237,7 @@ export default function TeamManagement() {
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
+                record={editRecord}
             />}
             {showTeams && <ModalTeams
                 open={showTeams}
@@ -245,6 +246,7 @@ export default function TeamManagement() {
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
+                record={editRecord} // Passar o registro a ser editado
             />}
             {showDepartments && <ModalDepartment
                 open={showDepartments}
@@ -253,6 +255,7 @@ export default function TeamManagement() {
                 message={setMessage}
                 status={setStatus}
                 enable={setEnable}
+                record={editRecord} // Passar o registro a ser editado
             />}
             {showDelete && <ModalDelete
                 open={showDelete}

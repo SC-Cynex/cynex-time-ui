@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Select, Modal } from "antd";
 import actions from './actions';
 
@@ -10,9 +10,20 @@ const roleOptions = [
   { value: 'ADMIN', label: 'Admin' }
 ];
 
-export default function ModalPositions({ open, close, setRefresh, message, status, enable }) {
+export default function ModalPositions({ open, close, setRefresh, message, status, enable, record }) {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (record) {
+      form.setFieldsValue({
+        name: record.name,
+        accessLevel: record.accessLevel
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [record, form]);
 
   const handleCancel = () => {
     form.resetFields();
@@ -26,7 +37,12 @@ export default function ModalPositions({ open, close, setRefresh, message, statu
 
       setIsLoading(true);
       setRefresh(false);
-      await actions.setRoleRegister(name, accessLevel, message, status, enable, setIsLoading);
+      
+      if (record) {
+        await actions.updateRoleRegister(record.id, name, accessLevel, message, status, enable, setIsLoading);
+      } else {
+        await actions.setRoleRegister(name, accessLevel, message, status, enable, setIsLoading);
+      }
       setRefresh(true);
       setIsLoading(false);
       handleCancel();
@@ -40,8 +56,8 @@ export default function ModalPositions({ open, close, setRefresh, message, statu
       open={open}
       onOk={handleOk}
       onCancel={handleCancel}
-      title={"Registrar"}
-      okText={"Adicionar"}
+      title={record ? "Editar Cargo" : "Registrar Cargo"}
+      okText={record ? "Salvar" : "Adicionar"}
       cancelText={"Cancelar"}
       confirmLoading={isLoading}
     >

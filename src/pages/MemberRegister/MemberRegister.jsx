@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Collapse, Space, Avatar, Row, Col, Button, ConfigProvider, Tooltip } from "antd";
 import members from "../../utils/members";
 import actions from "../PointRegister/actions";
+import actionsTeam from "./actions";
 import {
   UserOutlined,
   EditOutlined,
@@ -20,22 +21,38 @@ export default function MemberRegister() {
   const [showRegister, setShowRegister] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [data, setData] = useState([]);
+  const [listPoint, setListPoint] = useState([]);
 
-  const memberInfo = (position, workload, compTime) => {
-    const listPoint = actions.getPointRegister();
+  useEffect(() => {
+    actionsTeam.getUserById().then((data) => {
+      const teamId = data.teamId;
+      fetchUsersTeam(teamId);
+    });
 
+    async function fetchUsersTeam(teamId) {
+      const response = await fetch(`http://localhost:3000/user/team/${teamId}`);
+      const data = await response.json();
+      setData(data);
+    }
+
+    actions.getPointRegister()
+      .then(data => setListPoint(data))
+  }, []);
+
+  const memberInfo = (position) => {
     return (
       <div>
         <p className={styles.titleInfo}>Últimas Marcações</p>
         <Row className={styles.rowPointer}>
           <Space size={40} className={styles.spacePointer}>
-            {Array.isArray(listPoint) &&
+            {listPoint ? Array.isArray(listPoint) &&
               listPoint.slice(0, 8).map((item, i) => (
                 <div key={i} className={styles.pointers}>
                   <p className={styles.hours}>{item.horas}</p>
                   <p className={styles.date}>{item.data}</p>
                 </div>
-              ))}
+              )) : <p>Não há marcações</p>}
           </Space>
         </Row>
 
@@ -48,14 +65,6 @@ export default function MemberRegister() {
               <p className={styles.titleMore}>Cargo</p>
               <span className={styles.aboutMember}>{position}</span>
             </Col>
-            <Col style={{ marginRight: '30px' }}>
-              <p className={styles.titleMore}>Carga Horária</p>
-              <span className={styles.aboutMember}>{workload}</span>
-            </Col>
-            <Col style={{ marginRight: '30px' }}>
-              <p className={styles.titleMore}>Banco de Horas</p>
-              <span className={styles.aboutMember}>{compTime}</span>
-            </Col>
           </Row>
         </div>
       </div>
@@ -66,35 +75,35 @@ export default function MemberRegister() {
     <div>
       <Tooltip title={`Você tem marcações de ${name} para aprovar`}>
         <span style={{ marginRight: '10px' }}>
-          <BellOutlined 
-            style={{ fontSize: '20px' }} 
+          <BellOutlined
+            style={{ fontSize: '20px' }}
             onClick={(event) => {
               event.stopPropagation();
-            }}  
+            }}
           />
         </span>
       </Tooltip>
 
       <Tooltip title={'Editar membro'}>
         <span style={{ marginRight: '10px' }}>
-          <EditOutlined 
-            style={{ fontSize: '20px' }} 
+          <EditOutlined
+            style={{ fontSize: '20px' }}
             onClick={(event) => {
               event.stopPropagation();
               setShowEdit(true);
-            }}  
+            }}
           />
         </span>
       </Tooltip>
 
       <Tooltip title={'Remover membro da equipe'}>
         <span style={{ marginRight: '10px' }}>
-          <DeleteOutlined 
-            style={{ fontSize: '20px' }} 
+          <DeleteOutlined
+            style={{ fontSize: '20px' }}
             onClick={(event) => {
               event.stopPropagation();
-              setShowDelete(true); 
-            }}  
+              setShowDelete(true);
+            }}
           />
         </span>
       </Tooltip>
@@ -124,8 +133,8 @@ export default function MemberRegister() {
             }}
           >
             <Tooltip title="Registre um novo membro aqui" placement="bottom">
-              <Button 
-                size="large" 
+              <Button
+                size="large"
                 className={styles.register}
                 onClick={() => setShowRegister(true)}
               >
@@ -134,11 +143,11 @@ export default function MemberRegister() {
             </Tooltip>
           </ConfigProvider>
 
-          {members.map((member) => (
+          {data ? data.map((member) => (
             <Collapse
               items={[
                 {
-                  key: member.code,
+                  key: member.id,
                   label: (
                     <span className={styles.avartarUser}>
                       <FaUsersRectangle
@@ -149,9 +158,7 @@ export default function MemberRegister() {
                     </span>
                   ),
                   children: memberInfo(
-                    member.position,
-                    member.workload,
-                    member.compTime
+                    member.Role.name
                   ),
                   extra: genExtra(member.name),
                 },
@@ -160,7 +167,7 @@ export default function MemberRegister() {
               className={styles.userCollapse}
               size="large"
             />
-          ))}
+          )) : ""}
         </div>
         {showRegister && <ModalRegister
           open={showRegister}

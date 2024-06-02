@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Modal } from "antd";
 import actions from './actions';
 
-export default function ModalDepartment({ open, close, setRefresh, message, status, enable }) {
+export default function ModalDepartment({ open, close, setRefresh, message, status, enable, record }) {
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (record) {
+            form.setFieldsValue({
+                name: record.name,
+            });
+        } else {
+            form.resetFields();
+        }
+    }, [record, form]);
 
     const handleCancel = () => {
         form.resetFields();
@@ -18,7 +28,11 @@ export default function ModalDepartment({ open, close, setRefresh, message, stat
 
             setIsLoading(true);
             setRefresh(false);
-            await actions.setDepartmentsRegister(name, message, status, enable, setIsLoading);
+            if (record) {
+                await actions.updateDepartmentRegister(record.id, name, message, status, enable, setIsLoading);
+            } else {
+                await actions.setDepartmentsRegister(name, message, status, enable, setIsLoading);
+            }
             setRefresh(true);
             setIsLoading(false);
             handleCancel();
@@ -32,8 +46,8 @@ export default function ModalDepartment({ open, close, setRefresh, message, stat
             open={open}
             onOk={handleOk}
             onCancel={handleCancel}
-            title="Registrar"
-            okText="Adicionar"
+            title={record ? "Editar Departamento" : "Registrar Departamento"}
+            okText={record ? "Salvar" : "Adicionar"}
             cancelText="Cancelar"
             confirmLoading={isLoading}
         >

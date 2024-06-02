@@ -50,6 +50,35 @@ export default {
       throw error;
     }
   },
+  updateTeamtRegister: async (id, name, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const update = {
+        name: name,
+      };
+
+      const response = await fetch(`http://localhost:3000/team/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(update),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao atualizar equipe:", error);
+      setMessage("Erro ao atualizar equipe");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
+      throw error;
+    }
+  },
   deleteTeamRegister: async(id, setMessage, setStatus, setEnable) => {
     try {
       const response = await fetch(
@@ -117,6 +146,36 @@ export default {
       return data;
     } catch (error) {
       console.error("Erro ao buscar os cargos:", error);
+      throw error;
+    }
+  },
+  updateRoleRegister: async (id, name, accessLevel, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const update = {
+        name: name,
+        accessLevel: accessLevel
+      };
+
+      const response = await fetch(`http://localhost:3000/role/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(update),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao atualizar cargo:", error);
+      setMessage("Erro ao atualizar cargo");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
       throw error;
     }
   },
@@ -191,6 +250,37 @@ export default {
       throw error;
     }
   },
+  updateHourRegister: async (id, start, end, lunchTime, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const update = {
+        start: start,
+        end: end,
+        lunchTime: lunchTime
+      };
+
+      const response = await fetch(`http://localhost:3000/hour/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(update),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao atualizar horário:", error);
+      setMessage("Erro ao atualizar horário");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
+      throw error;
+    }
+  },
   deleteHourRegister: async(id, setMessage, setStatus, setEnable) => {
     try {
       const response = await fetch(
@@ -257,6 +347,35 @@ export default {
       return data;
     } catch (error) {
       console.error("Erro ao buscar os departamentos:", error);
+      throw error;
+    }
+  },
+  updateDepartmentRegister: async (id, name, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const update = {
+        name: name,
+      };
+
+      const response = await fetch(`http://localhost:3000/department/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(update),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao atualizar departamento:", error);
+      setMessage("Erro ao atualizar departamento");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
       throw error;
     }
   },
