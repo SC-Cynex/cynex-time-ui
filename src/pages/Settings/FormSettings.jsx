@@ -44,6 +44,9 @@ export default function FormSettings() {
 
     const handleSave = (values) => {
         setIsEditing(false);
+        actions_settings.updateUser(values).then((data) => {
+            setFormValues(data);
+        })
     };
 
     return (
@@ -218,7 +221,7 @@ export default function FormSettings() {
                             <Button type="primary" htmlType="submit" block size="large">Salvar</Button>
                         </Col>
                         <Col span={12}>
-                            <Button block size="large" onClick={handleCancel}>Cancel</Button>
+                            <Button block size="large" onClick={handleCancel}>Cancelar</Button>
                         </Col>
                     </Row>
                 ) : (
