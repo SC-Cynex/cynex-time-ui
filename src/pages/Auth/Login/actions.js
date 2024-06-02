@@ -27,6 +27,7 @@ export default {
           };expires=${expires.toUTCString()};path=/`;
 
           localStorage.setItem("id", data.user);
+          localStorage.setItem("team", data.team);
 
           window.location = "/point-register";
         }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Collapse, Space, Avatar, Row, Col, Button, ConfigProvider, Tooltip } from "antd";
-import members from "../../utils/members";
 import actions from "../PointRegister/actions";
 import actionsTeam from "./actions";
 import {
@@ -16,44 +15,76 @@ import styles from "./MemberRegister.module.css";
 import ModalRegister from "./ModalRegister";
 import ModalDelete from "./ModalDelete";
 import ModalEdit from "./ModalEdit";
+import ModalPoints from "./ModalPoints";
+import CTMessage from "../../components/CTMessage/CTMessage";
 
 export default function MemberRegister() {
   const [showRegister, setShowRegister] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showPoints, setShowPoints] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [data, setData] = useState([]);
-  const [listPoint, setListPoint] = useState([]);
+  const [listPointsByUser, setListPointsByUser] = useState({});
+  const teamId = localStorage.getItem("team");
+  const [refresh, setRefresh] = useState(true);
+  const [status, setStatus] = useState(null);
+  const [enable, setEnable] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    actionsTeam.getUserById().then((data) => {
-      const teamId = data.teamId;
-      fetchUsersTeam(teamId);
-    });
-
-    async function fetchUsersTeam(teamId) {
+    async function fetchUsersTeam() {
       const response = await fetch(`http://localhost:3000/user/team/${teamId}`);
       const data = await response.json();
       setData(data);
+
+      data.forEach((user) => {
+        actions.getPointRegisterByUser(user.id).then((points) => {
+          setListPointsByUser((prevPoints) => ({
+            ...prevPoints,
+            [user.id]: points,
+          }));
+        });
+      });
     }
 
-    actions.getPointRegister()
-      .then(data => setListPoint(data))
-  }, []);
+    if (refresh) {
+      fetchUsersTeam()
+    }
+  }, [refresh]);
 
-  const memberInfo = (position) => {
+  const memberInfo = (position, id) => {
+    const listPoint = listPointsByUser[id] || [];
+
     return (
       <div>
         <p className={styles.titleInfo}>Últimas Marcações</p>
         <Row className={styles.rowPointer}>
-          <Space size={40} className={styles.spacePointer}>
-            {listPoint ? Array.isArray(listPoint) &&
-              listPoint.slice(0, 8).map((item, i) => (
-                <div key={i} className={styles.pointers}>
-                  <p className={styles.hours}>{item.horas}</p>
-                  <p className={styles.date}>{item.data}</p>
-                </div>
-              )) : <p>Não há marcações</p>}
-          </Space>
+          <Col>
+            <Space size={40} className={styles.spacePointer}>
+              {listPoint && Array.isArray(listPoint) && listPoint.length > 0 ? (
+                listPoint.slice(0, 8).map((item, i) => (
+                  <div key={i} className={styles.pointers}>
+                    <p className={styles.hours}>{item.horas}</p>
+                    <p className={styles.date}>{item.data}</p>
+                  </div>
+                ))
+              ) : (
+                <p>Não há marcações</p>
+              )}
+            </Space>
+          </Col>
+          <Col>
+            <Button
+              onClick={() => {
+                setSelectedUserId(id);
+                setShowPoints(true);
+              }}
+              type="link"
+            >
+              Ver mais
+            </Button>
+          </Col>
         </Row>
 
         <div style={{ marginTop: '20px' }}>
@@ -71,7 +102,7 @@ export default function MemberRegister() {
     );
   };
 
-  const genExtra = (name) => (
+  const genExtra = (name, id) => (
     <div>
       <Tooltip title={`Você tem marcações de ${name} para aprovar`}>
         <span style={{ marginRight: '10px' }}>
@@ -90,6 +121,7 @@ export default function MemberRegister() {
             style={{ fontSize: '20px' }}
             onClick={(event) => {
               event.stopPropagation();
+              setSelectedUserId(id);
               setShowEdit(true);
             }}
           />
@@ -102,6 +134,7 @@ export default function MemberRegister() {
             style={{ fontSize: '20px' }}
             onClick={(event) => {
               event.stopPropagation();
+              setSelectedUserId(id);
               setShowDelete(true);
             }}
           />
@@ -142,9 +175,15 @@ export default function MemberRegister() {
               </Button>
             </Tooltip>
           </ConfigProvider>
+          {enable && (
+            <div style={{ marginBottom: '20px'}}>
+              <CTMessage message={message} type={status} enable={setEnable} />
+            </div>
+          )}
 
           {data ? data.map((member) => (
             <Collapse
+              key={member.id}
               items={[
                 {
                   key: member.id,
@@ -158,9 +197,10 @@ export default function MemberRegister() {
                     </span>
                   ),
                   children: memberInfo(
-                    member.Role.name
+                    member.Role.name,
+                    member.id
                   ),
-                  extra: genExtra(member.name),
+                  extra: genExtra(member.name, member.id),
                 },
               ]}
               expandIconPosition={"end"}
@@ -172,6 +212,10 @@ export default function MemberRegister() {
         {showRegister && <ModalRegister
           open={showRegister}
           close={() => setShowRegister(false)}
+          setRefresh={setRefresh}
+          message={setMessage}
+          status={setStatus}
+          enable={setEnable}
         />}
         {showDelete && <ModalDelete
           open={showDelete}
@@ -180,6 +224,16 @@ export default function MemberRegister() {
         {showEdit && <ModalEdit
           open={showEdit}
           close={() => setShowEdit(false)}
+          userId={selectedUserId}
+          setRefresh={setRefresh}
+          message={setMessage}
+          status={setStatus}
+          enable={setEnable}
+        />}
+        {showPoints && <ModalPoints
+          open={showPoints}
+          close={() => setShowPoints(false)}
+          userId={selectedUserId}
         />}
       </div>
     </DefaultPage>

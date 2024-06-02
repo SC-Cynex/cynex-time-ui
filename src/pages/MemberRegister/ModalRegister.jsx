@@ -1,27 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Select } from "antd";
-import CTModal from "../../components/CTModal/CTModal";
+import { Form, Select, Modal } from "antd";
+import actions from './actions';
 
-export default function ModalRegister({ open, close }) {
-
+export default function ModalRegister({ open, close, setRefresh, message, status, enable }) {
     const [listUser, setListUser] = useState([]);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [form] = Form.useForm();
+    const teamId = localStorage.getItem("team");
 
     useEffect(() => {
         fetch("http://localhost:3000/user/team/null")
             .then((res) => res.json())
-            .then((data) => setListUser(data))
-    }, [])
+            .then((data) => setListUser(data));
+    }, []);
+
+    const handleCancel = () => {
+        form.resetFields();
+        close();
+    };
+
+    const handleOk = async () => {
+        try {
+            setIsLoading(true);
+            setRefresh(false);
+            await actions.updateTeamUser(selectedUserId, teamId, message, status, enable, setIsLoading);
+            setRefresh(true);
+            setIsLoading(false);
+            handleCancel();
+        } catch (error) {
+            console.error("Erro ao registrar usuário", error);
+            setIsLoading(false);
+        }
+    };
+
+    const handleUserChange = (value) => {
+        setSelectedUserId(value);
+    };
 
     return (
         <div>
-            <CTModal
+            <Modal
                 open={open}
-                onCancel={close}
-                title={"Registrar"}
-                btnTitleOk={"Adicionar"}
-                btnTitleCancel={"Cancelar"}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                title="Adicionar usuário a equipe"
+                okText="Adicionar"
+                cancelText="Cancelar"
+                confirmLoading={isLoading}
             >
-                <Form action="" method="post" layout='vertical'>
+                <Form form={form} layout='vertical'>
                     <Form.Item
                         name={'users'}
                         label={'Usuários'}
@@ -38,10 +66,11 @@ export default function ModalRegister({ open, close }) {
                                     { label: user.name + ' - ' + user.email, value: user.id }
                                 ))
                             }
+                            onChange={handleUserChange}
                         />
                     </Form.Item>
                 </Form>
-            </CTModal>
+            </Modal>
         </div>
     )
 }

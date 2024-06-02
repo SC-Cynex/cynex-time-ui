@@ -70,6 +70,27 @@ export default {
       throw error;
     }
   },
+
+  getPointRegisterByUser: async(userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/point/last-eight/${userId}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os últimos oito registros");
+      }
+
+      const data = await response.json();
+      return data.map((item) => ({
+        horas: item.hour,
+        data: formatarData(item.createdAt),
+      }));
+    } catch (error) {
+      console.error("Erro ao buscar os últimos oito registros:", error);
+      throw error;
+    }
+  }
 };
 
 const formatarData = (dataString) => {

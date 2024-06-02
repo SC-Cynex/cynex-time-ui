@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Modal, Select } from "antd";
+import actions from './actions';
 
-export default function ModalEdit({ open, close }) {
+export default function ModalEdit({ open, close, userId, setRefresh, message, status, enable }) {
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false);
+    const [hours, setHours] = useState([]);
+    const [roles, setRoles] = useState([]);
+
+    useEffect(() => {
+        actions.getHourRegister().then((data) => {
+            setHours(data);
+        });
+
+        actions.getRoleRegister().then((data) => {
+            setRoles(data);
+        });
+    }, []);
+
+    const setFormValues = (data) => {
+        form.setFieldsValue({
+            name: data.name,
+            hour: `${data.hour.start} - ${data.hour.end}`,
+            role: data.Role.name
+        });
+    };
+
+    useEffect(() => {
+        actions.getUserById(userId).then((data) => {
+            setFormValues(data);
+        });
+    }, [form]);
 
     const handleCancel = () => {
         form.resetFields();
@@ -11,7 +38,7 @@ export default function ModalEdit({ open, close }) {
     };
 
     const handleOk = async () => {
-        
+
     };
 
     return (
@@ -38,7 +65,7 @@ export default function ModalEdit({ open, close }) {
                         }
                     ]}
                 >
-                    <Input size="large" disabled/>
+                    <Input size="large" disabled />
                 </Form.Item>
                 <Form.Item
                     name="role"
@@ -50,7 +77,10 @@ export default function ModalEdit({ open, close }) {
                         }
                     ]}
                 >
-                    <Select size="large" />
+                    <Select
+                        size="large"
+                        options={roles.map(item => ({ label: item.name, value: item.id }))}
+                    />
                 </Form.Item>
                 <Form.Item
                     name="hour"
@@ -62,7 +92,10 @@ export default function ModalEdit({ open, close }) {
                         }
                     ]}
                 >
-                    <Select size="large" />
+                    <Select
+                        size="large"
+                        options={hours.map(item => ({ label: `${item.start} às ${item.end}`, value: item.id }))}
+                    />
                 </Form.Item>
             </Form>
         </Modal>
