@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import DefaultPage from "../../components/DefaultPage/DefaultPage";
 import { Collapse, Space, Avatar, Row, Col, Button, ConfigProvider, Tooltip } from "antd";
 import actions from "../PointRegister/actions";
-import actionsTeam from "./actions";
 import {
   UserOutlined,
   EditOutlined,
@@ -220,6 +219,11 @@ export default function MemberRegister() {
         {showDelete && <ModalDelete
           open={showDelete}
           close={() => setShowDelete(false)}
+          userId={selectedUserId}
+          setRefresh={setRefresh}
+          message={setMessage}
+          status={setStatus}
+          enable={setEnable}
         />}
         {showEdit && <ModalEdit
           open={showEdit}

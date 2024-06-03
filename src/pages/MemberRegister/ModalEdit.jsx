@@ -19,18 +19,23 @@ export default function ModalEdit({ open, close, userId, setRefresh, message, st
     }, []);
 
     const setFormValues = (data) => {
+        const hour = hours.find(h => `${h.start} às ${h.end}` === `${data.hour.start} às ${data.hour.end}`);
+        const role = roles.find(r => r.name === data.Role.name);
+
         form.setFieldsValue({
             name: data.name,
-            hour: `${data.hour.start} - ${data.hour.end}`,
-            role: data.Role.name
+            hour: hour ? hour.id : null,
+            role: role ? role.id : null
         });
     };
 
     useEffect(() => {
-        actions.getUserById(userId).then((data) => {
-            setFormValues(data);
-        });
-    }, [form]);
+        if (userId) {
+            actions.getUserById(userId).then((data) => {
+                setFormValues(data);
+            });
+        }
+    }, [userId, hours, roles]);
 
     const handleCancel = () => {
         form.resetFields();
@@ -38,7 +43,18 @@ export default function ModalEdit({ open, close, userId, setRefresh, message, st
     };
 
     const handleOk = async () => {
+        try {
+            const values = await form.validateFields();
 
+            setIsLoading(true);
+            setRefresh(false);
+            await actions.updateTeamUser(userId, values, message, status, enable, setIsLoading);
+            setRefresh(true);
+            setIsLoading(false);
+            handleCancel();
+        } catch (error) {
+            console.error("Erro ao atualizar usuário", error);
+        }
     };
 
     return (

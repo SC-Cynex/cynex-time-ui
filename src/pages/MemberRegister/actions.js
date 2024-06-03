@@ -14,8 +14,8 @@ export default {
       throw error;
     }
   },
-  
-  updateTeamUser: async (id, teamId, setMessage, setStatus, setEnable, setIsLoading) => {
+
+  addTeamUser: async (id, teamId, setMessage, setStatus, setEnable, setIsLoading) => {
     setIsLoading(true);
 
     try {
@@ -39,6 +39,82 @@ export default {
     } catch (error) {
       console.error("Erro ao atualizar equipe do usuário:", error);
       setMessage("Erro ao atualizar equipe do usuário");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
+      throw error;
+    }
+  },
+
+  getHourRegister: async () => {
+    const response = await fetch('http://localhost:3000/hours');
+    return response.json();
+  },
+
+  getRoleRegister: async () => {
+    const response = await fetch('http://localhost:3000/roles');
+    return response.json();
+  },
+
+  getUserById: async (id) => {
+    const response = await fetch(`http://localhost:3000/user/${id}`);
+    return response.json();
+  },
+
+  updateTeamUser: async (id, values, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const update = {
+        hourId: values.hour,
+        roleId: values.role
+      };
+
+      const response = await fetch(`http://localhost:3000/user/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(update),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao atualizar dados do usuário:", error);
+      setMessage("Erro ao atualizar dados do usuário");
+      setStatus("error");
+      setEnable(false);
+      setIsLoading(false);
+      throw error;
+    }
+  },
+
+  removeUserTeam: async (id, setMessage, setStatus, setEnable, setIsLoading) => {
+    setIsLoading(true);
+    try {
+      const update = {
+        teamId: null
+      };
+
+      const response = await fetch(`http://localhost:3000/user/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(update),
+      });
+
+      const data = await response.json();
+      setMessage(data.message);
+      setEnable(true);
+      setStatus(data.status);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao remover usuário da equipe:", error);
+      setMessage("Erro ao remover usuário da equipe");
       setStatus("error");
       setEnable(false);
       setIsLoading(false);

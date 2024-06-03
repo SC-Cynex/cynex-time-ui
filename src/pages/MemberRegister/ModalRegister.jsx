@@ -24,7 +24,7 @@ export default function ModalRegister({ open, close, setRefresh, message, status
         try {
             setIsLoading(true);
             setRefresh(false);
-            await actions.updateTeamUser(selectedUserId, teamId, message, status, enable, setIsLoading);
+            await actions.addTeamUser(selectedUserId, teamId, message, status, enable, setIsLoading);
             setRefresh(true);
             setIsLoading(false);
             handleCancel();
